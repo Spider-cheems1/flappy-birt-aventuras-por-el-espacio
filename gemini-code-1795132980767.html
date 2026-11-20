@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#090d16" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>Flappy AI: Odisea Espacial</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #090d16; font-family: system-ui, -apple-system, sans-serif; touch-action: manipulation; }
+    canvas { display: block; width: 100vw; height: 100vh; }
+    #ui-top { position: fixed; top: env(safe-area-inset-top, 16px); left: 0; right: 0; padding: 14px 16px; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; pointer-events: none; z-index: 10; }
+    .hud-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .hud-pill { background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(8px); border: 1px solid rgba(56, 189, 248, 0.35); color: #f8fafc; padding: 7px 12px; border-radius: 16px; font-weight: 700; letter-spacing: 0.4px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    .hud-sub { font-size: 10px; color: #38bdf8; text-transform: uppercase; display: block; }
+    .hud-main { font-size: 19px; line-height: 1.1; }
+    .stat-pill { background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(8px); border: 1px solid rgba(148, 163, 184, 0.3); color: #f8fafc; padding: 7px 10px; border-radius: 14px; text-align: center; min-width: 58px; box-shadow: 0 4px 15px rgba(0,0,0,0.25); }
+    .stat-label { font-size: 9px; color: #94a3b8; text-transform: uppercase; display: block; letter-spacing: 0.5px; }
+    .stat-val { font-size: 15px; font-weight: 800; color: #facc15; }
+    #wins-val { color: #4ade80; }
+    .btn-group { display: flex; gap: 8px; pointer-events: auto; }
+    .icon-btn { width: 42px; height: 42px; border-radius: 50%; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.4); color: #f8fafc; font-size: 18px; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .icon-btn:active { transform: scale(0.92); background: rgba(56, 189, 248, 0.3); }
+    #dots-menu { position: fixed; top: calc(env(safe-area-inset-top, 16px) + 64px); right: 16px; background: rgba(15, 23, 42, 0.92); border: 1px solid #38bdf8; border-radius: 14px; padding: 12px 16px; color: #f8fafc; display: none; z-index: 20; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    #dots-menu.open { display: block; }
+    #dots-menu p { font-size: 13px; color: #94a3b8; margin-bottom: 4px; }
+    #dots-menu span { color: #38bdf8; font-weight: 800; font-size: 15px; }
+    #overlay { position: fixed; inset: 0; background: rgba(9, 13, 22, 0.78); backdrop-filter: blur(6px); display: none; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; padding: 24px; z-index: 15; }
+    #overlay.show { display: flex; }
+    #overlay h1 { font-size: 30px; margin-bottom: 8px; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    #overlay p { color: #cbd5e1; margin-bottom: 14px; font-size: 16px; }
+    .ov-stats { display: flex; gap: 14px; margin-bottom: 22px; }
+    .ov-box { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 14px; padding: 10px 18px; }
+    .ov-box small { display: block; font-size: 11px; color: #94a3b8; text-transform: uppercase; }
+    .ov-box strong { font-size: 20px; color: #f8fafc; }
+    #action-btn { background: linear-gradient(135deg, #0ea5e9, #6366f1); border: none; color: #fff; padding: 14px 32px; border-radius: 999px; font-size: 17px; font-weight: 700; cursor: pointer; box-shadow: 0 0 20px rgba(14, 165, 233, 0.5); }
+    #boss-hud { position: fixed; top: calc(env(safe-area-inset-top, 16px) + 74px); left: 50%; transform: translateX(-50%); width: min(320px, 85vw); display: none; z-index: 10; pointer-events: none; text-align: center; }
+    #boss-hud span { font-size: 12px; font-weight: 800; color: #f87171; letter-spacing: 1px; text-shadow: 0 2px 4px #000; }
+    .hp-bar { width: 100%; height: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid #f87171; border-radius: 999px; overflow: hidden; margin-top: 4px; }
+    #boss-hp-fill { width: 100%; height: 100%; background: linear-gradient(90deg, #ef4444, #f97316); transition: width 0.2s ease; }
+  </style>
+</head>
+<body>
+  <div id="ui-top">
+    <div class="hud-group">
+      <div class="hud-pill">
+        <span class="hud-sub" id="phase-label">Campo Soleado</span>
+        <span class="hud-main" id="score-val">0</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-label">Récord</span>
+        <span class="stat-val" id="record-val">0</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-label">Wins</span>
+        <span class="stat-val" id="wins-val">0</span>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="icon-btn" id="pause-btn" aria-label="Pausar">❚❚</button>
+      <button class="icon-btn" id="dots-btn" aria-label="Créditos">⋮</button>
+    </div>
+  </div>
+
+  <div id="dots-menu">
+    <p>Creado por</p>
+    <span>@spidercheems10</span>
+  </div>
+
+  <div id="boss-hud">
+    <span>JEFE OVNI FINAL</span>
+    <div class="hp-bar"><div id="boss-hp-fill"></div></div>
+  </div>
+
+  <div id="overlay">
+    <h1 id="ov-title">PAUSA</h1>
+    <p id="ov-sub">Toca continuar para seguir volando</p>
+    <div class="ov-stats" id="ov-stats" style="display:none;">
+      <div class="ov-box">
+        <small>Récord</small>
+        <strong id="ov-record">0</strong>
+      </div>
+      <div class="ov-box">
+        <small>Wins</small>
+        <strong id="ov-wins">0</strong>
+      </div>
+    </div>
+    <button id="action-btn">Continuar</button>
+  </div>
+
+  <canvas id="game"></canvas>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+    }
+
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    const scoreEl = document.getElementById('score-val');
+    const recordEl = document.getElementById('record-val');
+    const winsEl = document.getElementById('wins-val');
+    const phaseEl = document.getElementById('phase-label');
+    const pauseBtn = document.getElementById('pause-btn');
+    const dotsBtn = document.getElementById('dots-btn');
+    const dotsMenu = document.getElementById('dots-menu');
+    const overlay = document.getElementById('overlay');
+    const ovTitle = document.getElementById('ov-title');
+    const ovSub = document.getElementById('ov-sub');
+    const ovStats = document.getElementById('ov-stats');
+    const ovRecord = document.getElementById('ov-record');
+    const ovWins = document.getElementById('ov-wins');
+    const actionBtn = document.getElementById('action-btn');
+    const bossHud = document.getElementById('boss-hud');
+    const bossHpFill = document.getElementById('boss-hp-fill');
+
+    let bestScore = Number(localStorage.getItem('flappy_ai_record') || 0);
+    let winsCount = Number(localStorage.getItem('flappy_ai_wins') || 0);
+
+    let W, H;
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const PHASES = [
+      { name: 'Campo Soleado', sky: ['#38bdf8', '#bae6fd'], accent: '#22c55e', pipe: '#16a34a' },
+      { name: 'Campo de Noche', sky: ['#0f172a', '#1e293b'], accent: '#15803d', pipe: '#14532d' },
+      { name: 'Ciudad', sky: ['#60a5fa', '#dbeafe'], accent: '#64748b', pipe: '#334155' },
+      { name: 'Ciudad Nocturna', sky: ['#090d16', '#1e1b4b'], accent: '#312e81', pipe: '#4338ca' },
+      { name: 'Ciudad Futurista', sky: ['#1e1b4b', '#4c1d95'], accent: '#06b6d4', pipe: '#0891b2' },
+      { name: 'Estación de Lanzamiento', sky: ['#172554', '#7c2d12'], accent: '#f97316', pipe: '#ea580c' },
+      { name: 'Espacio Profundo', sky: ['#020617', '#090d16'], accent: '#a855f7', pipe: '#6366f1' },
+      { name: 'Interior Nave Nodriza', sky: ['#18181b', '#3f1d2e'], accent: '#ef4444', pipe: '#dc2626' }
+    ];
+
+    let state = 'READY';
+    let score = 0;
+    let frame = 0;
+    let helmetProgress = 0;
+    let voyagerX = -200;
+
+    const bird = { x: 0, y: 0, vy: 0, r: 18, gravity: 0.44, jump: -7.8 };
+    let pipes = [];
+    let bubbles = [];
+    let missiles = [];
+    let fireballs = [];
+    let particles = [];
+
+    const boss = {
+      active: false, x: 0, y: 0, hp: 100, maxHp: 100, dir: 1, fireTimer: 0, bubbleTimer: 0
+    };
+
+    function syncStats() {
+      if (score > bestScore) {
+        bestScore = score;
+        localStorage.setItem('flappy_ai_record', String(bestScore));
+      }
+      recordEl.textContent = bestScore;
+      winsEl.textContent = winsCount;
+      ovRecord.textContent = bestScore;
+      ovWins.textContent = winsCount;
+    }
+
+    function resetGame() {
+      score = 0;
+      frame = 0;
+      helmetProgress = 0;
+      voyagerX = W + 120;
+      bird.x = Math.min(W * 0.28, 130);
+      bird.y = H * 0.48;
+      bird.vy = 0;
+      pipes = [];
+      bubbles = [];
+      missiles = [];
+      fireballs = [];
+      particles = [];
+      boss.active = false;
+      boss.hp = 100;
+      bossHud.style.display = 'none';
+      ovStats.style.display = 'none';
+      overlay.classList.remove('show');
+      state = 'READY';
+      updateHUD();
+    }
+
+    function getPhaseIndex() {
+      if (score < 150) return Math.floor(score / 25);
+      if (score < 200) return 6;
+      return 7;
+    }
+
+    function updateHUD() {
+      scoreEl.textContent = score;
+      syncStats();
+      const pIdx = getPhaseIndex();
+      phaseEl.textContent = PHASES[pIdx].name;
+      if (score >= 200 && !boss.active && state === 'PLAYING') {
+        boss.active = true;
+        boss.x = W - Math.min(110, W * 0.22);
+        boss.y = H * 0.35;
+        bossHud.style.display = 'block';
+        bossHpFill.style.width = '100%';
+      }
+    }
+
+    function flap() {
+      if (state === 'READY') {
+        state = 'PLAYING';
+        bird.vy = bird.jump;
+      } else if (state === 'PLAYING') {
+        bird.vy = bird.jump;
+        for (let i = 0; i < 6; i++) {
+          particles.push({
+            x: bird.x - 10, y: bird.y + 4,
+            vx: -2 - Math.random() * 2, vy: (Math.random() - 0.5) * 3,
+            life: 20, color: '#38bdf8'
+          });
+        }
+      }
+    }
+
+    window.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('#pause-btn') || e.target.closest('#dots-btn') || e.target.closest('#dots-menu') || e.target.closest('#action-btn')) return;
+      dotsMenu.classList.remove('open');
+      flap();
+    });
+
+    pauseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (state === 'PLAYING') {
+        state = 'PAUSED';
+        ovTitle.textContent = 'PAUSA';
+        ovSub.textContent = 'Juego detenido';
+        ovStats.style.display = 'none';
+        actionBtn.textContent = 'Continuar';
+        overlay.classList.add('show');
+      } else if (state === 'PAUSED') {
+        state = 'PLAYING';
+        overlay.classList.remove('show');
+      }
+    });
+
+    dotsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dotsMenu.classList.toggle('open');
+    });
+
+    actionBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (state === 'PAUSED') {
+        state = 'PLAYING';
+        overlay.classList.remove('show');
+      } else {
+        resetGame();
+      }
+    });
+
+    function endGame(victory = false) {
+      if (victory) {
+        winsCount += 1;
+        localStorage.setItem('flappy_ai_wins', String(winsCount));
+      }
+      syncStats();
+      state = victory ? 'VICTORY' : 'GAMEOVER';
+      ovTitle.textContent = victory ? '¡MISIÓN CUMPLIDA!' : 'SISTEMA CAÍDO';
+      ovSub.textContent = victory ? `Derrotaste al Jefe OVNI con ${score} pts` : `Puntuación final: ${score} pts`;
+      ovStats.style.display = 'flex';
+      actionBtn.textContent = 'Jugar de nuevo';
+      overlay.classList.add('show');
+    }
+
+    function update() {
+      frame++;
+      if (state === 'READY') {
+        bird.y = H * 0.48 + Math.sin(frame * 0.08) * 8;
+        return;
+      }
+      if (state !== 'PLAYING') return;
+
+      bird.vy += bird.gravity;
+      bird.y += bird.vy;
+
+      if (bird.y - bird.r < 0) { bird.y = bird.r; bird.vy = 0; }
+      if (bird.y + bird.r > H) { endGame(false); return; }
+
+      const pIdx = getPhaseIndex();
+      if (pIdx >= 6 && helmetProgress < 1) helmetProgress = Math.min(1, helmetProgress + 0.03);
+      if (score >= 175 && score < 200) voyagerX -= 0.7;
+
+      if (!boss.active) {
+        if (frame % 95 === 0) {
+          const gap = Math.max(155, H * 0.24);
+          const minTop = 80;
+          const maxTop = H - gap - 80;
+          const top = minTop + Math.random() * Math.max(40, maxTop - minTop);
+          pipes.push({ x: W + 40, top, gap, w: 62, passed: false });
+        }
+
+        for (let i = pipes.length - 1; i >= 0; i--) {
+          const p = pipes[i];
+          p.x -= 3.4;
+
+          if (!p.passed && p.x + p.w < bird.x) {
+            p.passed = true;
+            score++;
+            updateHUD();
+          }
+
+          if (bird.x + bird.r - 4 > p.x && bird.x - bird.r + 4 < p.x + p.w) {
+            if (bird.y - bird.r + 4 < p.top || bird.y + bird.r - 4 > p.top + p.gap) {
+              endGame(false);
+              return;
+            }
+          }
+          if (p.x + p.w < -50) pipes.splice(i, 1);
+        }
+      } else {
+        boss.y += boss.dir * 2.1;
+        if (boss.y < 120 || boss.y > H - 120) boss.dir *= -1;
+
+        boss.fireTimer++;
+        if (boss.fireTimer >= 75) {
+          boss.fireTimer = 0;
+          const angle = Math.atan2(bird.y - boss.y, bird.x - boss.x);
+          fireballs.push({ x: boss.x - 30, y: boss.y, vx: Math.cos(angle) * 5.2, vy: Math.sin(angle) * 5.2, r: 12 });
+        }
+
+        boss.bubbleTimer++;
+        if (boss.bubbleTimer >= 110) {
+          boss.bubbleTimer = 0;
+          bubbles.push({ x: W * 0.55, y: 90 + Math.random() * (H - 180), vx: -2.2, r: 22 });
+        }
+
+        for (let i = bubbles.length - 1; i >= 0; i--) {
+          const b = bubbles[i];
+          b.x += b.vx;
+          b.y += Math.sin(frame * 0.08 + i) * 1.2;
+          if (Math.hypot(bird.x - b.x, bird.y - b.y) < bird.r + b.r) {
+            missiles.push({ x: bird.x + 15, y: bird.y, vx: 9 });
+            bubbles.splice(i, 1);
+          } else if (b.x < -40) bubbles.splice(i, 1);
+        }
+
+        for (let i = missiles.length - 1; i >= 0; i--) {
+          const m = missiles[i];
+          m.x += m.vx;
+          if (Math.hypot(m.x - boss.x, m.y - boss.y) < 52) {
+            boss.hp = Math.max(0, boss.hp - 10);
+            bossHpFill.style.width = `${boss.hp}%`;
+            missiles.splice(i, 1);
+            for (let k = 0; k < 14; k++) {
+              particles.push({ x: boss.x, y: boss.y, vx: (Math.random() - 0.5) * 7, vy: (Math.random() - 0.5) * 7, life: 25, color: '#f97316' });
+            }
+            if (boss.hp <= 0) {
+              score += 50;
+              updateHUD();
+              endGame(true);
+              return;
+            }
+          } else if (m.x > W + 40) missiles.splice(i, 1);
+        }
+
+        for (let i = fireballs.length - 1; i >= 0; i--) {
+          const f = fireballs[i];
+          f.x += f.vx;
+          f.y += f.vy;
+          if (Math.hypot(bird.x - f.x, bird.y - f.y) < bird.r + f.r - 4) {
+            endGame(false);
+            return;
+          }
+          if (f.x < -30 || f.y < -30 || f.y > H + 30) fireballs.splice(i, 1);
+        }
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const pt = particles[i];
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.life--;
+        if (pt.life <= 0) particles.splice(i, 1);
+      }
+    }
+
+    function drawBackground(pIdx) {
+      const ph = PHASES[pIdx];
+      const grad = ctx.createLinearGradient(0, 0, 0, H);
+      grad.addColorStop(0, ph.sky[0]);
+      grad.addColorStop(1, ph.sky[1]);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+
+      if (pIdx === 1 || pIdx === 3 || pIdx >= 5) {
+        ctx.fillStyle = 'rgba(255,255,255,0.75)';
+        for (let i = 0; i < 35; i++) {
+          const sx = ((i * 197 - frame * 0.3) % W + W) % W;
+          const sy = (i * 89) % (H * 0.85);
+          ctx.fillRect(sx, sy, 2, 2);
+        }
+      }
+
+      if (score >= 175 && score < 200) {
+        ctx.save();
+        ctx.translate(voyagerX, H * 0.26);
+        ctx.rotate(-0.2);
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(0, 0, 18, -1.1, 1.1); ctx.stroke();
+        ctx.fillStyle = '#eab308'; ctx.fillRect(-6, -6, 12, 12);
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-42, -16); ctx.moveTo(0, 0); ctx.lineTo(-36, 22); ctx.stroke();
+        ctx.fillStyle = '#94a3b8'; ctx.font = '10px monospace'; ctx.fillText('VOYAGER 1', -26, 34);
+        ctx.restore();
+      }
+
+      if (pIdx === 7) {
+        ctx.strokeStyle = 'rgba(239, 68, 68, 0.2)';
+        ctx.lineWidth = 2;
+        for (let x = (frame * -2) % 80; x < W; x += 80) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+        }
+      }
+    }
+
+    function drawBoss() {
+      if (!boss.active) return;
+      ctx.save();
+      ctx.translate(boss.x, boss.y);
+
+      ctx.fillStyle = 'rgba(125, 211, 252, 0.35)';
+      ctx.beginPath(); ctx.arc(0, -14, 34, Math.PI, 0); ctx.fill();
+
+      ctx.fillStyle = '#dc2626';
+      ctx.fillRect(-14, -22, 28, 16);
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(-11, -18, 22, 14);
+      ctx.fillStyle = '#fed7aa';
+      ctx.beginPath(); ctx.arc(0, -30, 11, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#dc2626';
+      ctx.fillRect(-11, -41, 22, 6);
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(-8, -28, 16, 4);
+
+      const ufoGrad = ctx.createLinearGradient(-52, 0, 52, 0);
+      ufoGrad.addColorStop(0, '#475569'); ufoGrad.addColorStop(0.5, '#cbd5e1'); ufoGrad.addColorStop(1, '#475569');
+      ctx.fillStyle = ufoGrad;
+      ctx.beginPath(); ctx.ellipse(0, 0, 54, 16, 0, 0, Math.PI * 2); ctx.fill();
+
+      for (let i = -2; i <= 2; i++) {
+        ctx.fillStyle = (frame + i) % 10 < 5 ? '#38bdf8' : '#f43f5e';
+        ctx.beginPath(); ctx.arc(i * 18, 2, 4, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    function drawBird() {
+      ctx.save();
+      ctx.translate(bird.x, bird.y);
+      ctx.rotate(Math.min(0.45, Math.max(-0.45, bird.vy * 0.05)));
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath(); ctx.arc(0, 0, bird.r, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath(); ctx.arc(6, -3, 6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath(); ctx.arc(8, -3, 2.5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#f59e0b';
+      ctx.beginPath(); ctx.moveTo(bird.r - 2, -3); ctx.lineTo(bird.r + 9, 1); ctx.lineTo(bird.r - 2, 5); ctx.fill();
+
+      if (helmetProgress > 0) {
+        ctx.globalAlpha = helmetProgress;
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(186, 230, 253, 0.25)';
+        ctx.beginPath(); ctx.arc(0, 0, bird.r + 7, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function render() {
+      const pIdx = getPhaseIndex();
+      drawBackground(pIdx);
+
+      const pipeColor = PHASES[pIdx].pipe;
+      pipes.forEach(p => {
+        ctx.fillStyle = pipeColor;
+        ctx.fillRect(p.x, 0, p.w, p.top);
+        ctx.fillRect(p.x, p.top + p.gap, p.w, H - (p.top + p.gap));
+        ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+        ctx.strokeRect(p.x, 0, p.w, p.top);
+        ctx.strokeRect(p.x, p.top + p.gap, p.w, H - (p.top + p.gap));
+      });
+
+      bubbles.forEach(b => {
+        ctx.strokeStyle = '#38bdf8';
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.2)';
+        ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#f43f5e';
+        ctx.fillRect(b.x - 10, b.y - 4, 20, 8);
+      });
+
+      missiles.forEach(m => {
+        ctx.fillStyle = '#f43f5e';
+        ctx.fillRect(m.x - 12, m.y - 4, 24, 8);
+        ctx.fillStyle = '#fef08a';
+        ctx.fillRect(m.x - 18, m.y - 2, 6, 4);
+      });
+
+      fireballs.forEach(f => {
+        ctx.fillStyle = '#f97316';
+        ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#fef08a';
+        ctx.beginPath(); ctx.arc(f.x, f.y, f.r * 0.5, 0, Math.PI * 2); ctx.fill();
+      });
+
+      particles.forEach(pt => {
+        ctx.fillStyle = pt.color;
+        ctx.globalAlpha = pt.life / 25;
+        ctx.fillRect(pt.x, pt.y, 4, 4);
+        ctx.globalAlpha = 1;
+      });
+
+      drawBoss();
+      drawBird();
+
+      if (state === 'READY') {
+        ctx.fillStyle = 'rgba(248, 250, 252, 0.9)';
+        ctx.font = 'bold 18px system-ui';
+        ctx.textAlign = 'center';
+        ctx.fillText('TOCA LA PANTALLA PARA VOLAR', W / 2, H * 0.65);
+      }
+    }
+
+    function loop() {
+      update();
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    resetGame();
+    loop();
+  </script>
+</body>
+</html>
