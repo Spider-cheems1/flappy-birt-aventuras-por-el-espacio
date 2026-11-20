@@ -1,16 +1,16 @@
 {
   "name": "Flappy Bird Aventuras Espaciales",
   "short_name": "Flappy Aventuras",
-  "description": "Juego arcade vertical de Flappy Bird con fases espaciales.",
+  "description": "Flappy Bird Aventuras Espaciales",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#090d16",
-  "theme_color": "#090d16",
+  "background_color": "#70c5ce",
+  "theme_color": "#70c5ce",
   "icons": [
     {
-      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='96' fill='%230f172a'/><circle cx='240' cy='256' r='115' fill='%2338bdf8'/><circle cx='282' cy='228' r='22' fill='%23ffffff'/><circle cx='289' cy='228' r='11' fill='%230f172a'/><polygon points='342,252 415,274 342,298' fill='%23f59e0b'/></svg>",
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='104' fill='%2370c5ce'/><ellipse cx='235' cy='262' rx='128' ry='102' fill='%23facc15' stroke='%231e293b' stroke-width='14'/><ellipse cx='205' cy='272' rx='54' ry='36' fill='%23fef08a' stroke='%231e293b' stroke-width='10'/><circle cx='286' cy='228' r='28' fill='%23ffffff' stroke='%231e293b' stroke-width='12'/><circle cx='296' cy='228' r='11' fill='%230f172a'/><polygon points='344,254 424,276 344,302' fill='%23f97316' stroke='%231e293b' stroke-width='12'/></svg>",
       "sizes": "192x192 512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
