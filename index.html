@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#70c5ce" />
+  <meta name="theme-color" content="#070b19" />
   <link rel="manifest" href="manifest.json" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2370c5ce'/><ellipse cx='29' cy='33' rx='16' ry='13' fill='%23facc15' stroke='%231e293b' stroke-width='2.5'/><circle cx='35' cy='29' r='3.6' fill='%23ffffff' stroke='%231e293b' stroke-width='2'/><circle cx='36.3' cy='29' r='1.5' fill='%230f172a'/><polygon points='43,32 54,35 43,38' fill='%23f97316' stroke='%231e293b' stroke-width='2'/></svg>" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23070b19'/><ellipse cx='30' cy='33' rx='15' ry='12' fill='%2338bdf8'/><circle cx='36' cy='29' r='3.5' fill='%23ffffff'/><circle cx='37.2' cy='29' r='1.5' fill='%23070b19'/><polygon points='43,32 53,35 43,38' fill='%23fbbf24'/></svg>" />
   <title>Flappy Bird Aventuras Espaciales</title>
   <style>
     * {
@@ -20,9 +20,9 @@
       width: 100%;
       height: 100dvh;
       overflow: hidden;
-      background: #1b2631;
-      color: #ffffff;
-      font-family: "Trebuchet MS", system-ui, -apple-system, sans-serif;
+      background: #050811;
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -35,7 +35,7 @@
       width: 100vw;
       height: 100dvh;
       overflow: hidden;
-      background: #70c5ce;
+      background: linear-gradient(180deg, #050814 0%, #0f172a 55%, #1e1b4b 100%);
     }
 
     @media (min-aspect-ratio: 1/1) {
@@ -43,11 +43,11 @@
         position: relative;
         top: auto;
         left: auto;
-        width: min(430px, 54vh);
+        width: min(440px, 54vh);
         height: 94dvh;
-        border-radius: 24px;
-        border: 3px solid #2c3e50;
-        box-shadow: 0 22px 55px rgba(0, 0, 0, 0.55);
+        border-radius: 26px;
+        border: 2px solid rgba(129, 140, 248, 0.4);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
       }
     }
 
@@ -78,24 +78,23 @@
     }
 
     #score {
-      font-size: 48px;
+      font-size: 44px;
       font-weight: 900;
       line-height: 1;
       color: #ffffff;
-      -webkit-text-stroke: 2px #1e293b;
-      text-shadow: 0 4px 0 #1e293b;
+      text-shadow: 0 0 18px rgba(56, 189, 248, 0.55), 0 3px 10px rgba(0, 0, 0, 0.7);
     }
 
     #phase-badge {
       font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(30, 41, 59, 0.72);
-      border: 2px solid #1e293b;
-      color: #fef08a;
+      background: rgba(15, 23, 42, 0.78);
+      border: 1px solid rgba(129, 140, 248, 0.35);
+      color: #c7d2fe;
     }
 
     .hud-actions {
@@ -108,21 +107,15 @@
     .icon-btn {
       width: 40px;
       height: 40px;
-      border-radius: 10px;
-      border: 2px solid #1e293b;
-      background: #f8fafc;
-      color: #1e293b;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: rgba(15, 23, 42, 0.78);
+      color: #f8fafc;
       font-size: 16px;
-      font-weight: 900;
-      box-shadow: 0 3px 0 #1e293b;
+      font-weight: 700;
       display: grid;
       place-items: center;
       cursor: pointer;
-    }
-
-    .icon-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 #1e293b;
     }
 
     #start-hint {
@@ -131,30 +124,27 @@
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      padding: 14px 20px;
-      border-radius: 14px;
-      background: #fef9c3;
-      border: 3px solid #1e293b;
-      box-shadow: 0 4px 0 #1e293b;
-      color: #1e293b;
+      padding: 16px 22px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.86);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
       pointer-events: none;
       z-index: 6;
-      width: min(82%, 290px);
+      width: min(82%, 300px);
     }
 
     #start-hint strong {
       display: block;
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: 0.03em;
-      color: #15803d;
-      margin-bottom: 3px;
+      font-size: 17px;
+      letter-spacing: 0.04em;
+      color: #7dd3fc;
+      margin-bottom: 4px;
     }
 
     #start-hint span {
       font-size: 13px;
-      font-weight: 700;
-      color: #334155;
+      color: #cbd5e1;
     }
 
     #gameover-panel {
@@ -165,7 +155,8 @@
       align-items: center;
       justify-content: center;
       gap: 14px;
-      background: rgba(15, 23, 42, 0.58);
+      background: rgba(5, 8, 20, 0.76);
+      backdrop-filter: blur(4px);
       z-index: 10;
       padding: 24px;
       text-align: center;
@@ -176,43 +167,31 @@
     }
 
     #gameover-panel h2 {
-      font-size: 32px;
-      font-weight: 900;
-      color: #f97316;
-      -webkit-text-stroke: 1.5px #1e293b;
-      text-shadow: 0 3px 0 #1e293b;
+      font-size: 28px;
+      color: #f472b6;
     }
 
     .stats-box {
-      background: #ded895;
-      border: 3px solid #1e293b;
-      box-shadow: 0 5px 0 #1e293b;
-      border-radius: 14px;
-      padding: 16px 24px;
-      min-width: 220px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(129, 140, 248, 0.35);
+      border-radius: 16px;
+      padding: 14px 22px;
+      min-width: 210px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      font-size: 16px;
-      font-weight: 800;
-      color: #1e293b;
+      gap: 6px;
+      font-size: 15px;
     }
 
     #restart-btn {
-      padding: 12px 26px;
-      border: 3px solid #1e293b;
-      border-radius: 12px;
-      background: #22c55e;
-      color: #ffffff;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      color: #050814;
       font-size: 16px;
-      font-weight: 900;
-      box-shadow: 0 4px 0 #1e293b;
+      font-weight: 800;
       cursor: pointer;
-    }
-
-    #restart-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 #1e293b;
     }
   </style>
 </head>
@@ -225,7 +204,7 @@
 
       <div class="hud-center">
         <div id="score">0</div>
-        <div id="phase-badge">FASE 1 · DÍA CLÁSICO</div>
+        <div id="phase-badge">FASE 1 · NEBULOSA INICIAL</div>
       </div>
 
       <div class="hud-actions">
@@ -239,12 +218,12 @@
     </div>
 
     <div id="gameover-panel">
-      <h2>GAME OVER</h2>
+      <h2>¡FIN DE LA ODISEA!</h2>
       <div class="stats-box">
-        <div>SCORE: <span id="final-score">0</span></div>
-        <div>BEST: <span id="best-score">0</span></div>
+        <div>Puntos: <strong id="final-score">0</strong></div>
+        <div>Récord: <strong id="best-score">0</strong></div>
       </div>
-      <button id="restart-btn">PLAY AGAIN</button>
+      <button id="restart-btn">JUGAR DE NUEVO</button>
     </div>
   </div>
 
@@ -279,7 +258,13 @@
     let width = 360;
     let height = 640;
     let dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const groundHeight = 84;
+
+    const stars = Array.from({ length: 48 }, (_, i) => ({
+      nx: ((i * 73) % 100) / 100,
+      ny: ((i * 137) % 100) / 100,
+      r: (i % 3) * 0.7 + 1,
+      speed: (i % 3) * 0.35 + 0.3
+    }));
 
     function resizeCanvas() {
       const rect = canvas.getBoundingClientRect();
@@ -291,7 +276,7 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       bird.x = width * 0.28;
       if (state === "idle") {
-        bird.y = (height - groundHeight) * 0.46;
+        bird.y = height * 0.44;
       }
     }
 
@@ -307,14 +292,13 @@
       radius: 17,
       vy: 0,
       gravity: 0.42,
-      flapImpulse: -7.6,
+      flapImpulse: -7.8,
       rotation: 0
     };
 
     let pipes = [];
     let frameCount = 0;
-    let scrollOffset = 0;
-    const pipeWidth = 60;
+    const pipeWidth = 58;
     const pipeGap = 142;
     const pipeSpeed = 2.6;
 
@@ -325,9 +309,9 @@
         const audioCtx = new AudioCtx();
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.type = "square";
+        osc.type = "triangle";
         osc.frequency.value = freq;
-        gain.gain.value = 0.04;
+        gain.gain.value = 0.06;
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start();
@@ -337,11 +321,11 @@
 
     function updatePhaseBadge() {
       if (score >= 20) {
-        phaseBadgeEl.textContent = "FASE 3 · NOCHE ESTELAR";
+        phaseBadgeEl.textContent = "FASE 3 · AGUJERO NEGRO";
       } else if (score >= 10) {
-        phaseBadgeEl.textContent = "FASE 2 · ATARDECER ESPACIAL";
+        phaseBadgeEl.textContent = "FASE 2 · CINTURÓN ESTELAR";
       } else {
-        phaseBadgeEl.textContent = "FASE 1 · DÍA CLÁSICO";
+        phaseBadgeEl.textContent = "FASE 1 · NEBULOSA INICIAL";
       }
     }
 
@@ -351,8 +335,7 @@
       updatePhaseBadge();
       pipes = [];
       frameCount = 0;
-      scrollOffset = 0;
-      bird.y = (height - groundHeight) * 0.46;
+      bird.y = height * 0.44;
       bird.vy = 0;
       bird.rotation = 0;
       gameoverPanel.classList.remove("show");
@@ -367,16 +350,15 @@
         startHintEl.style.display = "none";
       }
       bird.vy = bird.flapImpulse;
-      playTone(580, 0.07);
+      playTone(540, 0.08);
     }
 
     function spawnPipe() {
-      const playfieldH = height - groundHeight;
-      const margin = 68;
-      const maxTop = Math.max(margin + 28, playfieldH - pipeGap - margin);
+      const margin = 76;
+      const maxTop = Math.max(margin + 30, height - pipeGap - margin);
       const topHeight = margin + Math.random() * (maxTop - margin);
       pipes.push({
-        x: width + 24,
+        x: width + 20,
         top: topHeight,
         bottom: topHeight + pipeGap,
         passed: false
@@ -386,7 +368,7 @@
     function endGame() {
       if (state === "gameover") return;
       state = "gameover";
-      playTone(165, 0.2);
+      playTone(170, 0.22);
       if (score > bestScore) {
         bestScore = score;
         localStorage.setItem("flappy_aventuras_best", String(bestScore));
@@ -397,28 +379,20 @@
     }
 
     function update() {
-      if (state !== "playing") {
-        if (state === "idle") {
-          frameCount++;
-          bird.y = (height - groundHeight) * 0.46 + Math.sin(frameCount * 0.08) * 6;
-        }
-        return;
-      }
+      if (state !== "playing") return;
 
       frameCount++;
-      scrollOffset = (scrollOffset + pipeSpeed) % 48;
       bird.vy += bird.gravity;
       bird.y += bird.vy;
-      bird.rotation = Math.max(-0.45, Math.min(1.15, bird.vy * 0.065));
+      bird.rotation = Math.max(-0.45, Math.min(1.1, bird.vy * 0.06));
 
       if (bird.y - bird.radius < 0) {
         bird.y = bird.radius;
         bird.vy = 0;
       }
 
-      const groundTop = height - groundHeight;
-      if (bird.y + bird.radius >= groundTop) {
-        bird.y = groundTop - bird.radius;
+      if (bird.y + bird.radius >= height - 22) {
+        bird.y = height - 22 - bird.radius;
         endGame();
         return;
       }
@@ -436,7 +410,7 @@
           score++;
           scoreEl.textContent = score;
           updatePhaseBadge();
-          playTone(820, 0.06);
+          playTone(760, 0.07);
         }
 
         const withinX = bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + pipeWidth;
@@ -448,116 +422,71 @@
           return;
         }
 
-        if (p.x + pipeWidth < -40) {
+        if (p.x + pipeWidth < -30) {
           pipes.splice(i, 1);
         }
       }
     }
 
     function drawBackground() {
-      const playfieldH = height - groundHeight;
-
+      const grad = ctx.createLinearGradient(0, 0, 0, height);
       if (score >= 20) {
-        ctx.fillStyle = "#0f172a";
+        grad.addColorStop(0, "#02040a");
+        grad.addColorStop(0.6, "#1e1b4b");
+        grad.addColorStop(1, "#3b0764");
       } else if (score >= 10) {
-        ctx.fillStyle = "#38bdf8";
+        grad.addColorStop(0, "#050814");
+        grad.addColorStop(0.6, "#0f172a");
+        grad.addColorStop(1, "#1d4ed8");
       } else {
-        ctx.fillStyle = "#70c5ce";
+        grad.addColorStop(0, "#050814");
+        grad.addColorStop(0.55, "#0f172a");
+        grad.addColorStop(1, "#1e1b4b");
       }
-      ctx.fillRect(0, 0, width, playfieldH);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, width, height);
 
-      // Nubes clásicas en la parte baja del cielo
-      ctx.fillStyle = score >= 20 ? "rgba(148, 163, 184, 0.25)" : "#e0f7fa";
-      const cloudBaseY = playfieldH - 36;
-      const step = 96;
-      const startX = -((scrollOffset * 0.4) % step) - step;
-      for (let x = startX; x < width + step; x += step) {
-        ctx.beginPath();
-        ctx.arc(x + 20, cloudBaseY, 22, 0, Math.PI * 2);
-        ctx.arc(x + 44, cloudBaseY - 10, 28, 0, Math.PI * 2);
-        ctx.arc(x + 70, cloudBaseY, 20, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // Silueta de ciudad clásica suave
-      ctx.fillStyle = score >= 20 ? "#1e293b" : "#a3e4d7";
-      const bStep = 64;
-      const bStart = -((scrollOffset * 0.6) % bStep) - bStep;
-      for (let x = bStart; x < width + bStep; x += bStep) {
-        const bh = 42 + ((Math.abs(Math.floor((x + scrollOffset) / bStep)) * 17) % 36);
-        ctx.fillRect(x + 4, playfieldH - bh, 46, bh);
-      }
-
-      // Suelo clásico (franja verde superior + tierra)
-      ctx.fillStyle = "#ded895";
-      ctx.fillRect(0, playfieldH, width, groundHeight);
-
-      ctx.fillStyle = "#73bf2e";
-      ctx.fillRect(0, playfieldH, width, 20);
-
-      ctx.strokeStyle = "#1e293b";
-      ctx.lineWidth = 3;
+      // Planeta de fondo
+      ctx.fillStyle = "rgba(129, 140, 248, 0.16)";
       ctx.beginPath();
-      ctx.moveTo(0, playfieldH);
-      ctx.lineTo(width, playfieldH);
-      ctx.moveTo(0, playfieldH + 20);
-      ctx.lineTo(width, playfieldH + 20);
-      ctx.stroke();
+      ctx.arc(width * 0.76, height * 0.28, Math.min(width, height) * 0.14, 0, Math.PI * 2);
+      ctx.fill();
 
-      // Diagonales clásicas del césped
-      ctx.fillStyle = "#9ce659";
-      const diagStep = 24;
-      const dStart = -(scrollOffset % diagStep) - diagStep;
-      for (let x = dStart; x < width + diagStep; x += diagStep) {
+      // Estrellas
+      for (const s of stars) {
+        const sx = (((s.nx * width) - frameCount * s.speed) % width + width) % width;
+        const sy = s.ny * (height - 30);
+        ctx.fillStyle = "rgba(248, 250, 252, 0.78)";
         ctx.beginPath();
-        ctx.moveTo(x, playfieldH + 18);
-        ctx.lineTo(x + 10, playfieldH + 2);
-        ctx.lineTo(x + 18, playfieldH + 2);
-        ctx.lineTo(x + 8, playfieldH + 18);
-        ctx.closePath();
+        ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
         ctx.fill();
       }
-    }
 
-    function drawPipeSegment(x, y, w, h, isCap) {
-      if (h <= 0) return;
-      ctx.fillStyle = "#73bf2e";
-      ctx.fillRect(x, y, w, h);
-
-      // Brillo vertical clásico
-      ctx.fillStyle = "#9ce659";
-      ctx.fillRect(x + 6, y, 8, h);
-
-      // Sombra lateral clásica
-      ctx.fillStyle = "#558c22";
-      ctx.fillRect(x + w - 10, y, 10, h);
-
-      ctx.strokeStyle = "#1e293b";
-      ctx.lineWidth = 3;
-      ctx.strokeRect(x, y, w, h);
-
-      if (isCap) {
-        ctx.strokeRect(x, y, w, h);
-      }
+      // Franja inferior espacial
+      ctx.fillStyle = "#1e1b4b";
+      ctx.fillRect(0, height - 22, width, 22);
+      ctx.fillStyle = "#38bdf8";
+      ctx.fillRect(0, height - 22, width, 3);
     }
 
     function drawPipes() {
-      const capH = 26;
-      const capOverhang = 5;
-
       for (const p of pipes) {
-        // Tubería superior
-        const bodyTopH = Math.max(0, p.top - capH);
-        drawPipeSegment(p.x, 0, pipeWidth, bodyTopH, false);
-        drawPipeSegment(p.x - capOverhang, Math.max(0, p.top - capH), pipeWidth + capOverhang * 2, Math.min(capH, p.top), true);
+        ctx.fillStyle = "#0ea5e9";
+        drawRoundRect(ctx, p.x, 0, pipeWidth, p.top, 8);
+        ctx.fill();
 
-        // Tubería inferior
-        const bottomAreaH = Math.max(0, height - groundHeight - p.bottom);
-        const capBottomH = Math.min(capH, bottomAreaH);
-        drawPipeSegment(p.x - capOverhang, p.bottom, pipeWidth + capOverhang * 2, capBottomH, true);
-        if (bottomAreaH > capBottomH) {
-          drawPipeSegment(p.x, p.bottom + capBottomH, pipeWidth, bottomAreaH - capBottomH, false);
-        }
+        ctx.fillStyle = "#7dd3fc";
+        drawRoundRect(ctx, p.x - 4, Math.max(0, p.top - 22), pipeWidth + 8, 22, 6);
+        ctx.fill();
+
+        const bottomH = Math.max(0, height - 22 - p.bottom);
+        ctx.fillStyle = "#0ea5e9";
+        drawRoundRect(ctx, p.x, p.bottom, pipeWidth, bottomH, 8);
+        ctx.fill();
+
+        ctx.fillStyle = "#7dd3fc";
+        drawRoundRect(ctx, p.x - 4, p.bottom, pipeWidth + 8, 22, 6);
+        ctx.fill();
       }
     }
 
@@ -566,44 +495,28 @@
       ctx.translate(bird.x, bird.y);
       ctx.rotate(bird.rotation);
 
-      // Cuerpo amarillo clásico
-      ctx.fillStyle = "#facc15";
-      ctx.strokeStyle = "#1e293b";
-      ctx.lineWidth = 3;
+      ctx.fillStyle = "#38bdf8";
       ctx.beginPath();
-      ctx.ellipse(0, 0, bird.radius + 2, bird.radius - 1, 0, 0, Math.PI * 2);
+      ctx.arc(0, 0, bird.radius, 0, Math.PI * 2);
       ctx.fill();
-      ctx.stroke();
 
-      // Ala animada
-      const wingOffsetY = Math.sin(frameCount * 0.35) * 3.5;
-      ctx.fillStyle = "#fef08a";
-      ctx.beginPath();
-      ctx.ellipse(-5, 2 + wingOffsetY * 0.4, 8, 5.5, -0.2, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-
-      // Ojo blanco y pupila
       ctx.fillStyle = "#ffffff";
       ctx.beginPath();
-      ctx.arc(6.5, -4.5, 5.5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = "#1e293b";
-      ctx.beginPath();
-      ctx.arc(8.2, -4.5, 2.3, 0, Math.PI * 2);
+      ctx.arc(6, -4, 5.5, 0, Math.PI * 2);
       ctx.fill();
 
-      // Pico naranja clásico
-      ctx.fillStyle = "#f97316";
+      ctx.fillStyle = "#0f172a";
       ctx.beginPath();
-      ctx.moveTo(6, 1);
-      ctx.lineTo(18, 4.5);
-      ctx.lineTo(6, 9);
+      ctx.arc(7.5, -4, 2.6, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#fbbf24";
+      ctx.beginPath();
+      ctx.moveTo(bird.radius - 2, -1);
+      ctx.lineTo(bird.radius + 11, 3);
+      ctx.lineTo(bird.radius - 2, 8);
       ctx.closePath();
       ctx.fill();
-      ctx.stroke();
 
       ctx.restore();
     }
