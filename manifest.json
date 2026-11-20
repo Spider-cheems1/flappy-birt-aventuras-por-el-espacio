@@ -6,8 +6,8 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0b192c",
-  "theme_color": "#0b192c",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
   "icons": [
     {
       "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='104' fill='%230f172a'/><circle cx='242' cy='256' r='116' fill='%2338bdf8'/><circle cx='286' cy='228' r='22' fill='%23ffffff'/><circle cx='294' cy='228' r='11' fill='%230f172a'/><polygon points='346,252 420,274 346,298' fill='%23f59e0b'/></svg>",
