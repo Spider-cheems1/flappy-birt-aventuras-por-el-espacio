@@ -86,6 +86,10 @@
         .phase-banner {
             transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
+        .custom-scroll {
+            touch-action: pan-y;
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 </head>
 <body>
@@ -94,11 +98,23 @@
     <canvas id="gameCanvas"></canvas>
 
     <div id="top-ui" class="absolute top-0 left-0 w-full flex justify-between items-start gap-2 pointer-events-none z-20">
-        <button id="btn-pause" aria-label="Pausar juego" class="pointer-events-auto w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-2xl cyber-panel flex items-center justify-center text-sky-300 hover:text-white active:scale-90 transition-all shadow-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10 9v6m4-6v6" />
-            </svg>
-        </button>
+        <div class="flex flex-col gap-2 shrink-0 pointer-events-auto">
+            <button id="btn-pause" aria-label="Pausar juego" class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl cyber-panel flex items-center justify-center text-sky-300 hover:text-white active:scale-90 transition-all shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 9v6m4-6v6" />
+                </svg>
+            </button>
+            <button id="btn-selector" aria-label="Selector de personajes" class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl cyber-panel flex items-center justify-center text-sky-300 hover:text-white active:scale-90 transition-all shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+            </button>
+            <button id="btn-shop" aria-label="Tienda" class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl cyber-panel flex items-center justify-center text-amber-300 hover:text-white active:scale-90 transition-all shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+            </button>
+        </div>
 
         <div class="flex flex-col items-center min-w-0 flex-1 max-w-[65vw]">
             <div id="score-display" class="font-cyber text-3xl sm:text-5xl font-black text-white tracking-wider drop-shadow-[0_2px_10px_rgba(56,189,248,0.6)]">
@@ -110,7 +126,7 @@
 
             <div id="boss-hud" class="hidden mt-2.5 w-48 sm:w-72 cyber-panel rounded-2xl p-2 flex flex-col items-center">
                 <div class="w-full flex justify-between items-center text-[10px] sm:text-[11px] font-cyber font-bold text-rose-400 mb-1">
-                    <span class="truncate">JEFE OVNI · BIGOTES</span>
+                    <span id="boss-name-hud" class="truncate">JEFE OVNI · BIGOTES</span>
                     <span id="boss-hp-text" class="shrink-0 ml-1">100 / 100 HP</span>
                 </div>
                 <div class="w-full h-2.5 sm:h-3 bg-slate-950 rounded-full overflow-hidden border border-rose-500/40 p-0.5">
@@ -135,6 +151,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
                 </svg>
             </button>
+            <button id="btn-lang" aria-label="Idioma" class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl cyber-panel flex items-center justify-center text-cyan-300 hover:text-white active:scale-90 transition-all shadow-lg font-cyber text-xs font-extrabold">
+                ES
+            </button>
         </div>
     </div>
 
@@ -147,8 +166,78 @@
 
     <div id="start-hint" class="pointer-events-none fixed z-10 flex flex-col items-center text-center w-[86vw] max-w-[18rem]">
         <div class="cyber-panel rounded-2xl px-5 py-3.5 border-cyan-400/70">
-            <p class="font-cyber text-sm sm:text-base font-bold text-cyan-300 tracking-wide">TOCA LA PANTALLA</p>
-            <p class="text-xs sm:text-sm text-slate-200 mt-1">Pulsa cualquier zona para volar</p>
+            <p id="hint-title" class="font-cyber text-sm sm:text-base font-bold text-cyan-300 tracking-wide">TOCA LA PANTALLA</p>
+            <p id="hint-sub" class="text-xs sm:text-sm text-slate-200 mt-1">Pulsa cualquier zona para volar</p>
+        </div>
+    </div>
+
+    <!-- Modal Selector de Personajes -->
+    <div id="modal-selector" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-md z-30 flex items-center justify-center p-4">
+        <div class="cyber-panel rounded-3xl p-5 w-full max-w-[23rem] max-h-[84dvh] flex flex-col">
+            <div class="flex justify-between items-center mb-3">
+                <div>
+                    <h2 id="selector-title" class="font-cyber text-lg font-bold text-white">SELECTOR</h2>
+                    <p id="selector-sub" class="text-[11px] text-sky-300">Elige tu piloto desbloqueado</p>
+                </div>
+                <div class="bg-slate-900/90 border border-amber-400/30 rounded-xl px-2.5 py-1 text-right">
+                    <span class="text-[9px] uppercase text-slate-400 block" id="lbl-coins-sel">Monedas</span>
+                    <span id="selector-coins" class="font-cyber text-xs font-bold text-amber-300">0</span>
+                </div>
+            </div>
+            <div id="selector-list" class="custom-scroll overflow-y-auto flex flex-col gap-2.5 pr-1 flex-1"></div>
+            <button id="btn-close-selector" class="cyber-btn w-full py-3 rounded-2xl font-cyber font-bold text-white text-xs tracking-wider mt-4">
+                CERRAR
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Tienda (Personajes y Accesorios) -->
+    <div id="modal-shop" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-md z-30 flex items-center justify-center p-4">
+        <div class="cyber-panel rounded-3xl p-5 w-full max-w-[24rem] max-h-[86dvh] flex flex-col border-amber-400/40">
+            <div class="flex justify-between items-center mb-3">
+                <div>
+                    <h2 id="shop-title" class="font-cyber text-lg font-bold text-white">TIENDA</h2>
+                    <p id="shop-sub" class="text-[11px] text-amber-300">Usa tus puntos como monedas</p>
+                </div>
+                <div class="bg-slate-900/90 border border-amber-400/40 rounded-xl px-3 py-1 text-right">
+                    <span class="text-[9px] uppercase text-slate-400 block" id="lbl-coins-shop">Puntos / Monedas</span>
+                    <span id="shop-coins" class="font-cyber text-sm font-extrabold text-amber-300">0</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 mb-3">
+                <button id="tab-shop-chars" class="py-2 rounded-xl font-cyber text-[11px] font-bold bg-sky-500/30 border border-sky-400 text-white transition">
+                    PERSONAJES
+                </button>
+                <button id="tab-shop-acc" class="py-2 rounded-xl font-cyber text-[11px] font-bold bg-slate-900/70 border border-slate-700 text-slate-300 transition">
+                    ACCESORIOS
+                </button>
+            </div>
+
+            <div id="shop-list" class="custom-scroll overflow-y-auto flex flex-col gap-2.5 pr-1 flex-1"></div>
+
+            <button id="btn-close-shop" class="cyber-btn w-full py-3 rounded-2xl font-cyber font-bold text-white text-xs tracking-wider mt-4">
+                CERRAR
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Idioma -->
+    <div id="modal-lang" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-md z-30 flex items-center justify-center p-4">
+        <div class="cyber-panel rounded-3xl p-6 w-full max-w-[20rem] text-center">
+            <h2 id="lang-modal-title" class="font-cyber text-xl font-bold text-white mb-1">IDIOMA</h2>
+            <p id="lang-modal-sub" class="text-xs text-slate-400 mb-5">Selecciona el idioma del juego</p>
+            <div class="flex flex-col gap-3">
+                <button id="btn-lang-es" class="w-full py-3.5 rounded-2xl bg-sky-500/25 border border-sky-400 font-cyber font-bold text-white text-sm tracking-wider transition">
+                    ESPAÑOL (ES)
+                </button>
+                <button id="btn-lang-en" class="w-full py-3.5 rounded-2xl bg-slate-800/90 border border-slate-600/60 font-cyber font-bold text-slate-200 text-sm tracking-wider transition">
+                    ENGLISH (EN)
+                </button>
+                <button id="btn-close-lang" class="cyber-btn w-full py-3 rounded-2xl font-cyber font-bold text-white text-xs tracking-wider mt-1">
+                    CERRAR
+                </button>
+            </div>
         </div>
     </div>
 
@@ -159,8 +248,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 9v6m4-6v6" />
                 </svg>
             </div>
-            <h2 class="font-cyber text-xl sm:text-2xl font-bold text-white mb-1">JUEGO PAUSADO</h2>
-            <p class="text-xs text-slate-400 mb-6">Tómate un respiro, piloto</p>
+            <h2 id="pause-title" class="font-cyber text-xl sm:text-2xl font-bold text-white mb-1">JUEGO PAUSADO</h2>
+            <p id="pause-sub" class="text-xs text-slate-400 mb-6">Tómate un respiro, piloto</p>
             <div class="flex flex-col gap-3">
                 <button id="btn-resume" class="cyber-btn w-full py-3.5 rounded-2xl font-cyber font-bold text-white text-sm tracking-wider shadow-lg">
                     REANUDAR
@@ -181,11 +270,11 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-[11px] font-cyber uppercase tracking-widest text-cyan-400 mb-1">CREADOR OFICIAL</p>
+            <p id="creator-label" class="text-[11px] font-cyber uppercase tracking-widest text-cyan-400 mb-1">CREADOR OFICIAL</p>
             <h3 id="tiktok-handle" class="font-cyber text-xl font-extrabold text-white tracking-wide mb-4 select-all">
                 @spidercheems10
             </h3>
-            <p class="text-xs text-slate-300 mb-5 leading-relaxed">
+            <p id="tiktok-desc" class="text-xs text-slate-300 mb-5 leading-relaxed">
                 ¡Síguenos en TikTok para más juegos y contenido épico!
             </p>
             <div class="flex flex-col gap-2.5">
@@ -206,16 +295,16 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
             </div>
-            <h2 class="font-cyber text-xl sm:text-2xl font-black text-white mb-1">SISTEMA CAÍDO</h2>
+            <h2 id="gameover-title" class="font-cyber text-xl sm:text-2xl font-black text-white mb-1">SISTEMA CAÍDO</h2>
             <p id="gameover-reason" class="text-xs text-slate-400 mb-5">Has colisionado en vuelo</p>
 
             <div class="grid grid-cols-2 gap-3 mb-6">
                 <div class="bg-slate-900/80 rounded-2xl p-3 border border-slate-700/60">
-                    <p class="text-[10px] uppercase tracking-wider text-slate-400">Puntos</p>
+                    <p id="lbl-pts" class="text-[10px] uppercase tracking-wider text-slate-400">Puntos</p>
                     <p id="final-score" class="font-cyber text-2xl font-bold text-cyan-300 mt-0.5">0</p>
                 </div>
                 <div class="bg-slate-900/80 rounded-2xl p-3 border border-slate-700/60">
-                    <p class="text-[10px] uppercase tracking-wider text-slate-400">Récord</p>
+                    <p id="lbl-best" class="text-[10px] uppercase tracking-wider text-slate-400">Récord</p>
                     <p id="best-score" class="font-cyber text-2xl font-bold text-amber-400 mt-0.5">0</p>
                 </div>
             </div>
@@ -233,14 +322,14 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                 </svg>
             </div>
-            <p class="text-xs font-cyber uppercase tracking-widest text-amber-400 mb-1">¡MISIÓN CUMPLIDA!</p>
-            <h2 class="font-cyber text-2xl sm:text-3xl font-black text-white mb-2">JEFE DERROTADO</h2>
-            <p class="text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
+            <p id="victory-tag" class="text-xs font-cyber uppercase tracking-widest text-amber-400 mb-1">¡MISIÓN CUMPLIDA!</p>
+            <h2 id="victory-title" class="font-cyber text-2xl sm:text-3xl font-black text-white mb-2">JEFE DERROTADO</h2>
+            <p id="victory-desc" class="text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
                 Has destruido el OVNI del Señor Bigotes y salvado la galaxia.
             </p>
             <div class="bg-slate-900/80 rounded-2xl p-3.5 border border-amber-400/30 mb-6">
-                <p class="text-[11px] uppercase tracking-wider text-slate-400">Puntuación Final</p>
-                <p id="victory-score" class="font-cyber text-3xl font-black text-amber-300 mt-0.5">200</p>
+                <p id="lbl-final-score" class="text-[11px] uppercase tracking-wider text-slate-400">Puntuación Final</p>
+                <p id="victory-score" class="font-cyber text-3xl font-black text-amber-300 mt-0.5">400</p>
             </div>
             <button id="btn-restart-victory" class="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 font-cyber font-bold text-white text-sm tracking-wider shadow-lg active:scale-95 transition">
                 JUGAR DE NUEVO
@@ -380,7 +469,176 @@ class SoundFX {
 
 const sfx = new SoundFX();
 
-const PHASES = [
+const I18N = {
+    es: {
+        hintTitle: "TOCA LA PANTALLA",
+        hintSub: "Pulsa cualquier zona para volar",
+        newZone: "NUEVA ZONA ALCANZADA",
+        universeShift: "CAMBIO DE UNIVERSO",
+        universe2Title: "UNIVERSO 2 · TONOS ALTERNOS",
+        universe2Sub: "MISMAS FASES · META 400 PTS",
+        voyagerTitle: "SONDA VOYAGER 1 DETECTADA",
+        voyagerSub: "EASTER EGG ESPACIAL",
+        helmetTitle: "ESPACIO EXTERIOR · CASCO ACTIVADO",
+        helmetSub: "FASE ESPACIAL EXTENDIDA",
+        boss1Hud: "JEFE OVNI · BIGOTES",
+        boss1Title: "¡JEFE FINAL: SEÑOR BIGOTES!",
+        boss1Sub: "RECOGE MISILES EN BURBUJAS",
+        boss2Hud: "JEFE RETRO · PIXEL OVERLORD",
+        boss2Title: "¡JEFE RETRO PIXELEADO!",
+        boss2Sub: "META 400 PTS · RECOGE MISILES",
+        selectorTitle: "SELECTOR",
+        selectorSub: "Elige tu piloto desbloqueado",
+        shopTitle: "TIENDA",
+        shopSub: "Usa tus puntos como monedas",
+        coinsLabel: "Monedas",
+        coinsShopLabel: "Puntos / Monedas",
+        tabChars: "PERSONAJES",
+        tabAcc: "ACCESORIOS",
+        equipped: "EQUIPADO",
+        equip: "EQUIPAR",
+        buy: "COMPRAR",
+        noCoins: "SIN PUNTOS",
+        close: "CERRAR",
+        langTitle: "IDIOMA",
+        langSub: "Selecciona el idioma del juego",
+        pauseTitle: "JUEGO PAUSADO",
+        pauseSub: "Tómate un respiro, piloto",
+        resume: "REANUDAR",
+        restart: "REINICIAR",
+        creatorLabel: "CREADOR OFICIAL",
+        tiktokDesc: "¡Síguenos en TikTok para más juegos y contenido épico!",
+        copyHandle: "COPIAR ARROBA",
+        copied: "¡COPIADO!",
+        gameOverTitle: "SISTEMA CAÍDO",
+        reasonGround: "Tocaste la superficie",
+        reasonPipe: "Chocaste contra un obstáculo",
+        reasonFire: "Te alcanzó una bola de fuego del OVNI",
+        pts: "Puntos",
+        best: "Récord",
+        retry: "VOLVER A INTENTAR",
+        victoryTag: "¡MISIÓN CUMPLIDA!",
+        victoryTitle: "JEFE DERROTADO",
+        victoryDesc: "Has conquistado ambos universos y derrotado a los jefes.",
+        finalScore: "Puntuación Final",
+        playAgain: "JUGAR DE NUEVO",
+        phasePrefix: "Fase",
+        phases: [
+            "Campo Soleado",
+            "Campo de Noche",
+            "Ciudad",
+            "Ciudad Nocturna",
+            "Ciudad Futurista",
+            "Estación de Lanzamiento",
+            "Espacio Exterior",
+            "Interior Nave Nodriza"
+        ],
+        chars: {
+            pilot: { name: "Piloto Espacial", desc: "El explorador azul original." },
+            retro: { name: "Retro", desc: "El pájaro original de Flappy Bird." },
+            robot: { name: "Robot", desc: "Versión robótica con visor y antena." },
+            navidad: { name: "Feliz Navidad", desc: "Pájaro base con gorro de Papá Noel." },
+            halloween: { name: "Feliz Halloween", desc: "Pájaro con calavera espeluznante." }
+        },
+        acc: {
+            none: { name: "Sin Accesorio", desc: "Vuelo limpio sin extras." },
+            visor: { name: "Visor Cibernético", desc: "Estela neón de alta precisión." },
+            crown: { name: "Corona Estelar", desc: "Brillo dorado para pilotos." }
+        }
+    },
+    en: {
+        hintTitle: "TAP THE SCREEN",
+        hintSub: "Tap anywhere to fly",
+        newZone: "NEW ZONE REACHED",
+        universeShift: "UNIVERSE SHIFT",
+        universe2Title: "UNIVERSE 2 · ALT PALETTE",
+        universe2Sub: "SAME PHASES · GOAL 400 PTS",
+        voyagerTitle: "VOYAGER 1 PROBE DETECTED",
+        voyagerSub: "SPACE EASTER EGG",
+        helmetTitle: "OUTER SPACE · HELMET ACTIVE",
+        helmetSub: "EXTENDED SPACE PHASE",
+        boss1Hud: "UFO BOSS · WHISKERS",
+        boss1Title: "FINAL BOSS: MR. WHISKERS!",
+        boss1Sub: "COLLECT MISSILES IN BUBBLES",
+        boss2Hud: "RETRO BOSS · PIXEL OVERLORD",
+        boss2Title: "PIXEL RETRO BOSS!",
+        boss2Sub: "GOAL 400 PTS · GRAB MISSILES",
+        selectorTitle: "SELECTOR",
+        selectorSub: "Choose your unlocked pilot",
+        shopTitle: "SHOP",
+        shopSub: "Spend your points as coins",
+        coinsLabel: "Coins",
+        coinsShopLabel: "Points / Coins",
+        tabChars: "CHARACTERS",
+        tabAcc: "ACCESSORIES",
+        equipped: "EQUIPPED",
+        equip: "EQUIP",
+        buy: "BUY",
+        noCoins: "NO POINTS",
+        close: "CLOSE",
+        langTitle: "LANGUAGE",
+        langSub: "Choose game language",
+        pauseTitle: "GAME PAUSED",
+        pauseSub: "Take a breather, pilot",
+        resume: "RESUME",
+        restart: "RESTART",
+        creatorLabel: "OFFICIAL CREATOR",
+        tiktokDesc: "Follow us on TikTok for more games and epic content!",
+        copyHandle: "COPY HANDLE",
+        copied: "COPIED!",
+        gameOverTitle: "SYSTEM DOWN",
+        reasonGround: "You hit the surface",
+        reasonPipe: "You crashed into an obstacle",
+        reasonFire: "Hit by a UFO fireball",
+        pts: "Score",
+        best: "Best",
+        retry: "TRY AGAIN",
+        victoryTag: "MISSION ACCOMPLISHED!",
+        victoryTitle: "BOSS DEFEATED",
+        victoryDesc: "You conquered both universes and defeated the bosses.",
+        finalScore: "Final Score",
+        playAgain: "PLAY AGAIN",
+        phasePrefix: "Phase",
+        phases: [
+            "Sunny Field",
+            "Night Field",
+            "City",
+            "Night City",
+            "Futuristic City",
+            "Launch Station",
+            "Outer Space",
+            "Mothership Interior"
+        ],
+        chars: {
+            pilot: { name: "Space Pilot", desc: "The original blue explorer." },
+            retro: { name: "Retro", desc: "The classic Flappy Bird." },
+            robot: { name: "Robot", desc: "Robotic version with visor & antenna." },
+            navidad: { name: "Feliz Navidad", desc: "Base bird with Santa hat." },
+            halloween: { name: "Feliz Halloween", desc: "Bird with a spooky skull." }
+        },
+        acc: {
+            none: { name: "No Accessory", desc: "Clean flight with no extras." },
+            visor: { name: "Cyber Visor", desc: "Precision neon trail." },
+            crown: { name: "Star Crown", desc: "Golden shine for pilots." }
+        }
+    }
+};
+
+const CHARACTERS = [
+    { id: "pilot", price: 0, badge: "PILOT", color: "#38bdf8" },
+    { id: "retro", price: 30, badge: "RETRO", color: "#facc15" },
+    { id: "robot", price: 60, badge: "ROBOT", color: "#94a3b8" },
+    { id: "navidad", price: 90, badge: "XMAS", color: "#ef4444" },
+    { id: "halloween", price: 120, badge: "SKULL", color: "#f8fafc" }
+];
+
+const ACCESSORIES = [
+    { id: "none", price: 0, badge: "BASE", color: "#64748b" },
+    { id: "visor", price: 45, badge: "NEON", color: "#22d3ee" },
+    { id: "crown", price: 85, badge: "GOLD", color: "#fbbf24" }
+];
+
+const PHASES_U1 = [
     { id: 0, name: "Campo Soleado", minScore: 0, skyTop: [56, 189, 248], skyBottom: [186, 230, 253], pipeMain: "#10b981", pipeGlow: "#6ee7b7" },
     { id: 1, name: "Campo de Noche", minScore: 25, skyTop: [10, 15, 36], skyBottom: [30, 41, 82], pipeMain: "#3b82f6", pipeGlow: "#93c5fd" },
     { id: 2, name: "Ciudad", minScore: 50, skyTop: [96, 165, 250], skyBottom: [224, 242, 254], pipeMain: "#64748b", pipeGlow: "#cbd5e1" },
@@ -390,6 +648,21 @@ const PHASES = [
     { id: 6, name: "Espacio Exterior", minScore: 150, skyTop: [3, 5, 12], skyBottom: [12, 18, 38], pipeMain: "#06b6d4", pipeGlow: "#67e8f9" },
     { id: 7, name: "Interior Nave Nodriza", minScore: 200, skyTop: [15, 20, 30], skyBottom: [30, 41, 59], pipeMain: "#ef4444", pipeGlow: "#fca5a5" }
 ];
+
+const PHASES_U2 = [
+    { id: 0, name: "Campo Soleado", minScore: 200, skyTop: [245, 158, 11], skyBottom: [254, 240, 138], pipeMain: "#84cc16", pipeGlow: "#d9f99d" },
+    { id: 1, name: "Campo de Noche", minScore: 225, skyTop: [39, 10, 56], skyBottom: [88, 28, 135], pipeMain: "#a855f7", pipeGlow: "#e9d5ff" },
+    { id: 2, name: "Ciudad", minScore: 250, skyTop: [45, 212, 191], skyBottom: [204, 251, 241], pipeMain: "#0d9488", pipeGlow: "#5eead4" },
+    { id: 3, name: "Ciudad Nocturna", minScore: 275, skyTop: [30, 10, 28], skyBottom: [80, 18, 52], pipeMain: "#f43f5e", pipeGlow: "#fda4af" },
+    { id: 4, name: "Ciudad Futurista", minScore: 300, skyTop: [6, 30, 46], skyBottom: [14, 116, 144], pipeMain: "#eab308", pipeGlow: "#fef08a" },
+    { id: 5, name: "Estación de Lanzamiento", minScore: 325, skyTop: [49, 12, 74], skyBottom: [190, 24, 93], pipeMain: "#c026d3", pipeGlow: "#f5d0fe" },
+    { id: 6, name: "Espacio Exterior", minScore: 350, skyTop: [12, 6, 26], skyBottom: [46, 16, 101], pipeMain: "#38bdf8", pipeGlow: "#bae6fd" },
+    { id: 7, name: "Interior Nave Nodriza", minScore: 400, skyTop: [28, 15, 45], skyBottom: [76, 29, 149], pipeMain: "#22c55e", pipeGlow: "#86efac" }
+];
+
+function getActivePhases() {
+    return currentUniverse === 2 ? PHASES_U2 : PHASES_U1;
+}
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
@@ -402,6 +675,7 @@ const bannerSubtitle = document.getElementById('banner-subtitle');
 const startHint = document.getElementById('start-hint');
 
 const bossHud = document.getElementById('boss-hud');
+const bossNameHud = document.getElementById('boss-name-hud');
 const bossHpBar = document.getElementById('boss-hp-bar');
 const bossHpText = document.getElementById('boss-hp-text');
 
@@ -409,6 +683,9 @@ const modalPause = document.getElementById('modal-pause');
 const modalDots = document.getElementById('modal-dots');
 const modalGameover = document.getElementById('modal-gameover');
 const modalVictory = document.getElementById('modal-victory');
+const modalSelector = document.getElementById('modal-selector');
+const modalShop = document.getElementById('modal-shop');
+const modalLang = document.getElementById('modal-lang');
 
 function getViewportSize() {
     const vv = window.visualViewport;
@@ -424,14 +701,24 @@ let dpr = Math.min(window.devicePixelRatio || 1, 2);
 let gameState = 'WAITING';
 let previousStateBeforeModal = 'WAITING';
 
+let lang = localStorage.getItem('flappy_lang') === 'en' ? 'en' : 'es';
+let coins = parseInt(localStorage.getItem('flappy_coins') || '0', 10);
+let ownedChars = JSON.parse(localStorage.getItem('flappy_owned_chars') || '["pilot"]');
+let equippedChar = localStorage.getItem('flappy_char') || 'pilot';
+let ownedAcc = JSON.parse(localStorage.getItem('flappy_owned_acc') || '["none"]');
+let equippedAcc = localStorage.getItem('flappy_acc') || 'none';
+let shopTab = 'chars';
+
 let score = 0;
 let bestScore = parseInt(localStorage.getItem('flappy_ai_best') || '0', 10);
+let currentUniverse = 1;
 let currentPhaseIndex = 0;
+let boss1Defeated = false;
 let bannerTimeout = null;
 let tick = 0;
 
-let currentSkyTop = [...PHASES[0].skyTop];
-let currentSkyBottom = [...PHASES[0].skyBottom];
+let currentSkyTop = [...PHASES_U1[0].skyTop];
+let currentSkyBottom = [...PHASES_U1[0].skyBottom];
 
 const bird = {
     x: 0,
@@ -457,6 +744,7 @@ let voyager = { active: false, x: 0, y: 0, progress: 0 };
 
 const boss = {
     active: false,
+    type: 1, // 1 = Señor Bigotes (200 pts), 2 = Retro Pixel Boss (400 pts)
     x: 0,
     y: 0,
     targetY: 0,
@@ -473,6 +761,75 @@ const boss = {
 let fireballs = [];
 let missileBubbles = [];
 let activeMissiles = [];
+
+function t() {
+    return I18N[lang] || I18N.es;
+}
+
+function saveProgress() {
+    localStorage.setItem('flappy_coins', String(coins));
+    localStorage.setItem('flappy_owned_chars', JSON.stringify(ownedChars));
+    localStorage.setItem('flappy_char', equippedChar);
+    localStorage.setItem('flappy_owned_acc', JSON.stringify(ownedAcc));
+    localStorage.setItem('flappy_acc', equippedAcc);
+    localStorage.setItem('flappy_lang', lang);
+}
+
+function updatePhaseIndicatorText() {
+    const phases = getActivePhases();
+    const pName = t().phases[currentPhaseIndex] || phases[currentPhaseIndex].name;
+    const uTag = currentUniverse === 2 ? " · U2" : "";
+    phaseIndicator.textContent = `${t().phasePrefix} ${currentPhaseIndex + 1} · ${pName}${uTag}`;
+}
+
+function applyLanguageUI() {
+    const tr = t();
+    document.getElementById('btn-lang').textContent = lang.toUpperCase();
+    document.getElementById('hint-title').textContent = tr.hintTitle;
+    document.getElementById('hint-sub').textContent = tr.hintSub;
+
+    document.getElementById('selector-title').textContent = tr.selectorTitle;
+    document.getElementById('selector-sub').textContent = tr.selectorSub;
+    document.getElementById('lbl-coins-sel').textContent = tr.coinsLabel;
+    document.getElementById('btn-close-selector').textContent = tr.close;
+
+    document.getElementById('shop-title').textContent = tr.shopTitle;
+    document.getElementById('shop-sub').textContent = tr.shopSub;
+    document.getElementById('lbl-coins-shop').textContent = tr.coinsShopLabel;
+    document.getElementById('tab-shop-chars').textContent = tr.tabChars;
+    document.getElementById('tab-shop-acc').textContent = tr.tabAcc;
+    document.getElementById('btn-close-shop').textContent = tr.close;
+
+    document.getElementById('lang-modal-title').textContent = tr.langTitle;
+    document.getElementById('lang-modal-sub').textContent = tr.langSub;
+    document.getElementById('btn-close-lang').textContent = tr.close;
+
+    document.getElementById('pause-title').textContent = tr.pauseTitle;
+    document.getElementById('pause-sub').textContent = tr.pauseSub;
+    document.getElementById('btn-resume').textContent = tr.resume;
+    document.getElementById('btn-restart-pause').textContent = tr.restart;
+
+    document.getElementById('creator-label').textContent = tr.creatorLabel;
+    document.getElementById('tiktok-desc').textContent = tr.tiktokDesc;
+    document.getElementById('btn-copy-tiktok').textContent = tr.copyHandle;
+    document.getElementById('btn-close-dots').textContent = tr.close;
+
+    document.getElementById('gameover-title').textContent = tr.gameOverTitle;
+    document.getElementById('lbl-pts').textContent = tr.pts;
+    document.getElementById('lbl-best').textContent = tr.best;
+    document.getElementById('btn-restart-go').textContent = tr.retry;
+
+    document.getElementById('victory-tag').textContent = tr.victoryTag;
+    document.getElementById('victory-title').textContent = tr.victoryTitle;
+    document.getElementById('victory-desc').textContent = tr.victoryDesc;
+    document.getElementById('lbl-final-score').textContent = tr.finalScore;
+    document.getElementById('btn-restart-victory').textContent = tr.playAgain;
+
+    bossNameHud.textContent = boss.type === 2 ? tr.boss2Hud : tr.boss1Hud;
+    updatePhaseIndicatorText();
+    renderSelectorList();
+    renderShopList();
+}
 
 function drawRoundRect(c, x, y, w, h, r) {
     const radius = Math.min(r, w / 2, h / 2);
@@ -540,9 +897,11 @@ function initBackgroundDecor() {
 
 function resetGame() {
     score = 0;
+    currentUniverse = 1;
     currentPhaseIndex = 0;
-    currentSkyTop = [...PHASES[0].skyTop];
-    currentSkyBottom = [...PHASES[0].skyBottom];
+    boss1Defeated = false;
+    currentSkyTop = [...PHASES_U1[0].skyTop];
+    currentSkyBottom = [...PHASES_U1[0].skyBottom];
 
     bird.radius = width < 480 ? 16 : 18;
     bird.x = width < 480 ? Math.max(54, Math.min(width * 0.24, 96)) : Math.min(width * 0.26, 150);
@@ -564,13 +923,14 @@ function resetGame() {
     voyager.progress = 0;
 
     boss.active = false;
+    boss.type = 1;
     boss.hp = 100;
     boss.hitFlash = 0;
     boss.fireTimer = 0;
     boss.bubbleTimer = 0;
 
     scoreDisplay.textContent = '0';
-    phaseIndicator.textContent = `Fase 1 · ${PHASES[0].name}`;
+    updatePhaseIndicatorText();
     bossHud.classList.add('hidden');
     startHint.classList.remove('hidden');
 
@@ -578,12 +938,25 @@ function resetGame() {
     modalDots.classList.add('hidden');
     modalGameover.classList.add('hidden');
     modalVictory.classList.add('hidden');
+    modalSelector.classList.add('hidden');
+    modalShop.classList.add('hidden');
+    modalLang.classList.add('hidden');
 
     gameState = 'WAITING';
     initBackgroundDecor();
 }
 
 function getPhaseIndexForScore(pts) {
+    if (currentUniverse === 2) {
+        if (pts >= 400) return 7;
+        if (pts >= 350) return 6;
+        if (pts >= 325) return 5;
+        if (pts >= 300) return 4;
+        if (pts >= 275) return 3;
+        if (pts >= 250) return 2;
+        if (pts >= 225) return 1;
+        return 0;
+    }
     if (pts >= 200) return 7;
     if (pts >= 150) return 6;
     if (pts >= 125) return 5;
@@ -594,8 +967,8 @@ function getPhaseIndexForScore(pts) {
     return 0;
 }
 
-function showPhaseBanner(title, subtitle = "NUEVA FASE ALCANZADA") {
-    bannerSubtitle.textContent = subtitle;
+function showPhaseBanner(title, subtitle = null) {
+    bannerSubtitle.textContent = subtitle || t().newZone;
     bannerTitle.textContent = title.toUpperCase();
     phaseBanner.classList.remove('opacity-0', '-translate-y-4');
     phaseBanner.classList.add('opacity-100', 'translate-y-0');
@@ -607,38 +980,62 @@ function showPhaseBanner(title, subtitle = "NUEVA FASE ALCANZADA") {
     }, 2600);
 }
 
-function checkPhaseProgression() {
-    const newPhaseIdx = getPhaseIndexForScore(score);
+function enterUniverse2() {
+    currentUniverse = 2;
+    currentPhaseIndex = 0;
+    boss.active = false;
+    bossHud.classList.add('hidden');
+    pipes = [];
+    fireballs = [];
+    missileBubbles = [];
+    activeMissiles = [];
+    updatePhaseIndicatorText();
+    showPhaseBanner(t().universe2Title, t().universe2Sub);
+}
 
-    if (score >= 175 && score < 200 && !voyager.active) {
+function checkPhaseProgression() {
+    if (currentUniverse === 1 && boss1Defeated && score >= 200) {
+        enterUniverse2();
+        return;
+    }
+
+    const newPhaseIdx = getPhaseIndexForScore(score);
+    const phases = getActivePhases();
+
+    const voyagerTrigger = currentUniverse === 1
+        ? (score >= 175 && score < 200)
+        : (score >= 375 && score < 400);
+
+    if (voyagerTrigger && !voyager.active) {
         voyager.active = true;
         voyager.x = width + 90;
         voyager.y = height * 0.28;
-        showPhaseBanner("SONDA VOYAGER 1 DETECTADA", "EASTER EGG ESPACIAL");
+        showPhaseBanner(t().voyagerTitle, t().voyagerSub);
     }
 
     if (newPhaseIdx !== currentPhaseIndex) {
         currentPhaseIndex = newPhaseIdx;
-        const phase = PHASES[currentPhaseIndex];
-        phaseIndicator.textContent = `Fase ${currentPhaseIndex + 1} · ${phase.name}`;
+        updatePhaseIndicatorText();
 
         if (currentPhaseIndex === 6) {
             bird.hasHelmet = true;
             bird.helmetAnim = 0.01;
             sfx.playHelmet();
             spawnParticles(bird.x, bird.y, '#38bdf8', 22);
-            showPhaseBanner("ESPACIO EXTERIOR · CASCO ACTIVADO", "FASE ESPACIAL EXTENDIDA");
+            showPhaseBanner(t().helmetTitle, t().helmetSub);
         } else if (currentPhaseIndex === 7) {
-            activateFinalBoss();
+            activateBoss(currentUniverse === 2 ? 2 : 1);
         } else {
-            showPhaseBanner(phase.name);
+            showPhaseBanner(t().phases[currentPhaseIndex] || phases[currentPhaseIndex].name);
         }
     }
 }
 
-function activateFinalBoss() {
+function activateBoss(bossType = 1) {
     boss.active = true;
+    boss.type = bossType;
     boss.hp = 100;
+    boss.maxHp = 100;
     boss.x = width + 120;
     boss.y = height * 0.42;
     boss.targetY = height * 0.42;
@@ -646,9 +1043,15 @@ function activateFinalBoss() {
     boss.bubbleTimer = 40;
 
     pipes = [];
+    bossNameHud.textContent = bossType === 2 ? t().boss2Hud : t().boss1Hud;
     bossHud.classList.remove('hidden');
     updateBossHud();
-    showPhaseBanner("¡JEFE FINAL: SEÑOR BIGOTES!", "RECOGE MISILES EN BURBUJAS");
+
+    if (bossType === 2) {
+        showPhaseBanner(t().boss2Title, t().boss2Sub);
+    } else {
+        showPhaseBanner(t().boss1Title, t().boss1Sub);
+    }
 }
 
 function updateBossHud() {
@@ -687,6 +1090,7 @@ function spawnParticles(x, y, color, count = 10, speedScale = 1) {
 }
 
 function spawnPipe() {
+    const phases = getActivePhases();
     const gapHeight = Math.max(152, Math.min(188, height * 0.24));
     const minTop = Math.max(96, height * 0.14);
     const maxBottom = height - 48 - gapHeight;
@@ -698,8 +1102,8 @@ function spawnPipe() {
         topHeight,
         gap: gapHeight,
         passed: false,
-        phaseColor: PHASES[currentPhaseIndex].pipeMain,
-        glowColor: PHASES[currentPhaseIndex].pipeGlow
+        phaseColor: phases[currentPhaseIndex].pipeMain,
+        glowColor: phases[currentPhaseIndex].pipeGlow
     });
 }
 
@@ -707,7 +1111,7 @@ function spawnFireball() {
     sfx.playFireball();
     const targetY = bird.y + (Math.random() * 120 - 60);
     const angle = Math.atan2(targetY - boss.y, bird.x - (boss.x - 45));
-    const speed = Math.min(5.6, Math.max(4.0, width * 0.0085));
+    const speed = Math.min(5.8, Math.max(4.1, width * 0.0088));
 
     fireballs.push({
         x: boss.x - 45,
@@ -715,7 +1119,8 @@ function spawnFireball() {
         vx: -Math.abs(Math.cos(angle) * speed),
         vy: Math.sin(angle) * speed * 0.55,
         radius: 13,
-        phase: 0
+        phase: 0,
+        pixel: boss.type === 2
     });
 }
 
@@ -731,7 +1136,7 @@ function spawnMissileBubble() {
     });
 }
 
-function triggerEndState(isVictory, reason = "Has colisionado en vuelo") {
+function triggerEndState(isVictory, reason = null) {
     if (score > bestScore) {
         bestScore = score;
         localStorage.setItem('flappy_ai_best', String(bestScore));
@@ -745,7 +1150,7 @@ function triggerEndState(isVictory, reason = "Has colisionado en vuelo") {
         modalVictory.classList.remove('hidden');
     } else {
         gameState = 'GAMEOVER';
-        document.getElementById('gameover-reason').textContent = reason;
+        document.getElementById('gameover-reason').textContent = reason || t().reasonPipe;
         document.getElementById('final-score').textContent = String(score);
         document.getElementById('best-score').textContent = String(bestScore);
         modalGameover.classList.remove('hidden');
@@ -761,7 +1166,8 @@ function lerpColor(current, target, factor = 0.04) {
 function update() {
     tick++;
 
-    const targetPhase = PHASES[currentPhaseIndex];
+    const phases = getActivePhases();
+    const targetPhase = phases[currentPhaseIndex];
     lerpColor(currentSkyTop, targetPhase.skyTop, 0.035);
     lerpColor(currentSkyBottom, targetPhase.skyBottom, 0.035);
 
@@ -809,11 +1215,14 @@ function update() {
     }
 
     if (tick % 2 === 0) {
+        const trailColor = equippedAcc === 'visor'
+            ? '#22d3ee'
+            : (equippedAcc === 'crown' ? '#fbbf24' : (bird.hasHelmet ? '#38bdf8' : targetPhase.pipeGlow));
         bird.trail.push({
             x: bird.x - 10,
             y: bird.y,
             alpha: 0.55,
-            color: bird.hasHelmet ? '#38bdf8' : targetPhase.pipeGlow
+            color: trailColor
         });
     }
     for (let i = bird.trail.length - 1; i >= 0; i--) {
@@ -827,27 +1236,27 @@ function update() {
         bird.vy = 0;
     }
     if (bird.y + bird.radius > height - 24) {
-        triggerEndState(false, "Tocaste la superficie");
+        triggerEndState(false, t().reasonGround);
         return;
     }
 
     if (voyager.active) {
         voyager.x -= 1.6;
         voyager.y += Math.sin(tick * 0.03) * 0.35;
-        if (voyager.x < -120 || score >= 200) {
+        if (voyager.x < -120 || score >= 400) {
             voyager.active = false;
         }
     }
 
     if (!boss.active) {
         pipeSpawnTimer++;
-        const spawnInterval = Math.max(76, Math.round(98 - score * 0.08));
+        const spawnInterval = Math.max(76, Math.round(98 - score * 0.05));
         if (pipeSpawnTimer >= spawnInterval) {
             spawnPipe();
             pipeSpawnTimer = 0;
         }
 
-        const speed = PIPE_SPEED_BASE + Math.min(2.0, score * 0.008);
+        const speed = PIPE_SPEED_BASE + Math.min(2.2, score * 0.005);
 
         for (let i = pipes.length - 1; i >= 0; i--) {
             const p = pipes[i];
@@ -856,6 +1265,8 @@ function update() {
             if (!p.passed && p.x + p.width < bird.x) {
                 p.passed = true;
                 score++;
+                coins++;
+                saveProgress();
                 scoreDisplay.textContent = String(score);
                 sfx.playScore();
                 checkPhaseProgression();
@@ -867,7 +1278,7 @@ function update() {
             const hitBottom = bird.y + bird.radius * 0.75 > p.topHeight + p.gap;
 
             if (hitX && (hitTop || hitBottom)) {
-                triggerEndState(false, "Chocaste contra un obstáculo");
+                triggerEndState(false, t().reasonPipe);
                 return;
             }
 
@@ -884,13 +1295,13 @@ function update() {
         if (boss.hitFlash > 0) boss.hitFlash--;
 
         boss.fireTimer++;
-        if (boss.fireTimer >= 82) {
+        if (boss.fireTimer >= (boss.type === 2 ? 72 : 82)) {
             boss.fireTimer = 0;
             spawnFireball();
         }
 
         boss.bubbleTimer++;
-        if (boss.bubbleTimer >= 115) {
+        if (boss.bubbleTimer >= 110) {
             boss.bubbleTimer = 0;
             spawnMissileBubble();
         }
@@ -943,10 +1354,19 @@ function update() {
 
                 if (boss.hp <= 0) {
                     score += 50;
+                    coins += 50;
+                    saveProgress();
                     scoreDisplay.textContent = String(score);
                     spawnParticles(boss.x, boss.y, '#fbbf24', 45, 1.6);
-                    triggerEndState(true);
-                    return;
+
+                    if (boss.type === 1 && currentUniverse === 1) {
+                        boss1Defeated = true;
+                        enterUniverse2();
+                        return;
+                    } else {
+                        triggerEndState(true);
+                        return;
+                    }
                 }
                 continue;
             }
@@ -961,7 +1381,7 @@ function update() {
             f.phase += 0.2;
 
             if (Math.hypot(bird.x - f.x, bird.y - f.y) < bird.radius * 0.75 + f.radius * 0.75) {
-                triggerEndState(false, "Te alcanzó una bola de fuego del OVNI");
+                triggerEndState(false, t().reasonFire);
                 return;
             }
 
@@ -981,7 +1401,8 @@ function update() {
 }
 
 function drawBackground() {
-    const targetPhase = PHASES[currentPhaseIndex];
+    const phases = getActivePhases();
+    const targetPhase = phases[currentPhaseIndex];
     const topStr = `rgb(${Math.round(currentSkyTop[0])}, ${Math.round(currentSkyTop[1])}, ${Math.round(currentSkyTop[2])})`;
     const botStr = `rgb(${Math.round(currentSkyBottom[0])}, ${Math.round(currentSkyBottom[1])}, ${Math.round(currentSkyBottom[2])})`;
 
@@ -1132,6 +1553,32 @@ function drawBoss() {
     ctx.save();
     ctx.translate(boss.x, boss.y);
 
+    if (boss.type === 2) {
+        // Jefe 2: Estética retro pixeleada (mismo concepto de OVNI + piloto enemigo)
+        const px = 6;
+        ctx.fillStyle = boss.hitFlash > 0 ? '#ffffff' : '#a855f7';
+        for (let gx = -6; gx <= 6; gx++) {
+            for (let gy = -4; gy <= 3; gy++) {
+                if (Math.abs(gx) + Math.abs(gy) <= 8) {
+                    ctx.fillRect(gx * px, gy * px, px - 1, px - 1);
+                }
+            }
+        }
+        // Ojos pixelados retro
+        ctx.fillStyle = '#22d3ee';
+        ctx.fillRect(-3 * px, -2 * px, px, px);
+        ctx.fillRect(2 * px, -2 * px, px, px);
+        // Boca pixelada
+        ctx.fillStyle = '#facc15';
+        ctx.fillRect(-2 * px, 1 * px, 4 * px, px * 0.7);
+        // Luces retro en la base
+        ctx.fillStyle = (tick % 12 < 6) ? '#f43f5e' : '#38bdf8';
+        ctx.fillRect(-5 * px, 2 * px, px, px);
+        ctx.fillRect(4 * px, 2 * px, px, px);
+        ctx.restore();
+        return;
+    }
+
     ctx.fillStyle = 'rgba(125, 211, 252, 0.25)';
     ctx.strokeStyle = 'rgba(186, 230, 253, 0.75)';
     ctx.lineWidth = 2;
@@ -1199,39 +1646,167 @@ function drawBird() {
     ctx.translate(bird.x, bird.y);
     ctx.rotate(bird.rotation);
 
-    const bodyGrad = ctx.createRadialGradient(-4, -5, 2, 0, 0, bird.radius);
-    bodyGrad.addColorStop(0, '#7dd3fc');
-    bodyGrad.addColorStop(1, '#0284c7');
-    ctx.fillStyle = bodyGrad;
-    ctx.beginPath();
-    ctx.arc(0, 0, bird.radius, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = '#e0f2fe';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
     const wingY = Math.sin(bird.wingPhase) * 4;
-    ctx.fillStyle = '#38bdf8';
-    ctx.beginPath();
-    ctx.ellipse(-4, 2 + wingY * 0.4, 8, 5, -0.2, 0, Math.PI * 2);
-    ctx.fill();
 
-    ctx.fillStyle = '#0f172a';
-    ctx.beginPath();
-    ctx.arc(7, -3, 5.5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#38bdf8';
-    ctx.beginPath();
-    ctx.arc(8.5, -4, 2, 0, Math.PI * 2);
-    ctx.fill();
+    if (equippedChar === 'retro') {
+        // Pájaro original clásico de Flappy Bird (amarillo retro)
+        ctx.fillStyle = '#facc15';
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, bird.radius * 1.05, bird.radius * 0.92, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
 
-    ctx.fillStyle = '#f59e0b';
-    ctx.beginPath();
-    ctx.moveTo(bird.radius - 2, -3);
-    ctx.lineTo(bird.radius + 9, 1);
-    ctx.lineTo(bird.radius - 2, 5);
-    ctx.closePath();
-    ctx.fill();
+        // Ala blanca clásica
+        ctx.fillStyle = '#fef9c3';
+        ctx.beginPath();
+        ctx.ellipse(-5, 2 + wingY * 0.45, 7, 5, -0.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Ojo grande blanco
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(7, -4, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(9, -4, 2.3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Pico naranja clásico
+        ctx.fillStyle = '#f97316';
+        drawRoundRect(ctx, bird.radius - 3, -2, 13, 9, 3);
+        ctx.fill();
+        ctx.stroke();
+    } else if (equippedChar === 'robot') {
+        // Versión robótica del pájaro
+        ctx.fillStyle = '#94a3b8';
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 2;
+        drawRoundRect(ctx, -bird.radius, -bird.radius * 0.9, bird.radius * 2, bird.radius * 1.8, 7);
+        ctx.fill();
+        ctx.stroke();
+
+        // Antena
+        ctx.strokeStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.moveTo(-2, -bird.radius * 0.9);
+        ctx.lineTo(-6, -bird.radius - 8);
+        ctx.stroke();
+        ctx.fillStyle = '#f43f5e';
+        ctx.beginPath();
+        ctx.arc(-6, -bird.radius - 9, 3.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Visor robótico
+        ctx.fillStyle = '#0f172a';
+        drawRoundRect(ctx, 2, -7, 13, 8, 2);
+        ctx.fill();
+        ctx.fillStyle = '#22d3ee';
+        ctx.fillRect(5, -5, 7, 4);
+
+        // Ala mecánica
+        ctx.fillStyle = '#64748b';
+        drawRoundRect(ctx, -10, -2 + wingY * 0.35, 10, 7, 2);
+        ctx.fill();
+
+        // Pico metálico
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.moveTo(bird.radius - 1, -2);
+        ctx.lineTo(bird.radius + 9, 2);
+        ctx.lineTo(bird.radius - 1, 6);
+        ctx.closePath();
+        ctx.fill();
+    } else {
+        // Pájaro base (piloto, navidad o halloween)
+        const bodyGrad = ctx.createRadialGradient(-4, -5, 2, 0, 0, bird.radius);
+        bodyGrad.addColorStop(0, '#7dd3fc');
+        bodyGrad.addColorStop(1, '#0284c7');
+        ctx.fillStyle = bodyGrad;
+        ctx.beginPath();
+        ctx.arc(0, 0, bird.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#e0f2fe';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.ellipse(-4, 2 + wingY * 0.4, 8, 5, -0.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (equippedChar === 'halloween') {
+            // Máscara / calavera de Halloween
+            ctx.fillStyle = '#f8fafc';
+            ctx.beginPath();
+            ctx.arc(5, -1, bird.radius * 0.78, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.arc(3, -3, 3.2, 0, Math.PI * 2);
+            ctx.arc(10, -3, 3.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillRect(4, 3, 7, 2);
+        } else {
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.arc(7, -3, 5.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(8.5, -4, 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.moveTo(bird.radius - 2, -3);
+        ctx.lineTo(bird.radius + 9, 1);
+        ctx.lineTo(bird.radius - 2, 5);
+        ctx.closePath();
+        ctx.fill();
+
+        if (equippedChar === 'navidad') {
+            // Gorro de Papá Noel
+            ctx.fillStyle = '#dc2626';
+            ctx.beginPath();
+            ctx.moveTo(-13, -8);
+            ctx.lineTo(3, -24);
+            ctx.lineTo(13, -8);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            drawRoundRect(ctx, -14, -10, 28, 5, 2.5);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(4, -25, 4.2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    // Accesorios equipados
+    if (equippedAcc === 'visor') {
+        ctx.strokeStyle = '#22d3ee';
+        ctx.lineWidth = 2;
+        drawRoundRect(ctx, -2, -9, bird.radius + 5, 10, 3);
+        ctx.stroke();
+    } else if (equippedAcc === 'crown') {
+        ctx.fillStyle = '#fbbf24';
+        ctx.beginPath();
+        ctx.moveTo(-9, -bird.radius + 1);
+        ctx.lineTo(-10, -bird.radius - 9);
+        ctx.lineTo(-3, -bird.radius - 4);
+        ctx.lineTo(0, -bird.radius - 11);
+        ctx.lineTo(3, -bird.radius - 4);
+        ctx.lineTo(10, -bird.radius - 9);
+        ctx.lineTo(9, -bird.radius + 1);
+        ctx.closePath();
+        ctx.fill();
+    }
 
     if (bird.hasHelmet && bird.helmetAnim > 0) {
         ctx.save();
@@ -1300,15 +1875,22 @@ function drawCombatEntities() {
         const pulse = 1 + Math.sin(f.phase) * 0.12;
         ctx.scale(pulse, pulse);
 
-        ctx.fillStyle = '#ea580c';
-        ctx.beginPath();
-        ctx.arc(0, 0, f.radius, 0, Math.PI * 2);
-        ctx.fill();
+        if (f.pixel) {
+            ctx.fillStyle = '#e879f9';
+            ctx.fillRect(-10, -10, 20, 20);
+            ctx.fillStyle = '#fef08a';
+            ctx.fillRect(-5, -5, 10, 10);
+        } else {
+            ctx.fillStyle = '#ea580c';
+            ctx.beginPath();
+            ctx.arc(0, 0, f.radius, 0, Math.PI * 2);
+            ctx.fill();
 
-        ctx.fillStyle = '#fde047';
-        ctx.beginPath();
-        ctx.arc(-2, -2, f.radius * 0.55, 0, Math.PI * 2);
-        ctx.fill();
+            ctx.fillStyle = '#fde047';
+            ctx.beginPath();
+            ctx.arc(-2, -2, f.radius * 0.55, 0, Math.PI * 2);
+            ctx.fill();
+        }
         ctx.restore();
     }
 
@@ -1347,8 +1929,162 @@ function openModal(modalEl) {
 
 function closeModal(modalEl) {
     modalEl.classList.add('hidden');
-    if (gameState === 'PAUSED' && modalPause.classList.contains('hidden') && modalDots.classList.contains('hidden')) {
+    const anyOpen =
+        !modalPause.classList.contains('hidden') ||
+        !modalDots.classList.contains('hidden') ||
+        !modalSelector.classList.contains('hidden') ||
+        !modalShop.classList.contains('hidden') ||
+        !modalLang.classList.contains('hidden');
+
+    if (gameState === 'PAUSED' && !anyOpen) {
         gameState = previousStateBeforeModal;
+    }
+}
+
+function renderSelectorList() {
+    const tr = t();
+    document.getElementById('selector-coins').textContent = String(coins);
+    const listEl = document.getElementById('selector-list');
+    listEl.innerHTML = '';
+
+    for (const ch of CHARACTERS) {
+        const unlocked = ownedChars.includes(ch.id);
+        const isEquipped = equippedChar === ch.id;
+        const info = tr.chars[ch.id] || { name: ch.id, desc: '' };
+
+        const row = document.createElement('div');
+        row.className = `flex items-center justify-between gap-2 p-3 rounded-2xl border ${
+            isEquipped ? 'bg-sky-500/20 border-sky-400' : 'bg-slate-900/75 border-slate-700/60'
+        }`;
+
+        const left = document.createElement('div');
+        left.className = 'flex items-center gap-3 min-w-0';
+        left.innerHTML = `
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center font-cyber text-[10px] font-black text-slate-950 shrink-0" style="background:${ch.color}">
+                ${ch.badge}
+            </div>
+            <div class="min-w-0">
+                <p class="font-cyber text-xs font-bold text-white truncate">${info.name}</p>
+                <p class="text-[11px] text-slate-400 truncate">${info.desc}</p>
+            </div>
+        `;
+
+        const btn = document.createElement('button');
+        btn.className = 'shrink-0 px-3 py-2 rounded-xl font-cyber text-[10px] font-bold tracking-wider transition';
+        if (!unlocked) {
+            btn.disabled = true;
+            btn.className += ' bg-slate-800 text-slate-500 border border-slate-700';
+            btn.textContent = `${ch.price} PTS`;
+        } else if (isEquipped) {
+            btn.className += ' bg-emerald-500/25 text-emerald-300 border border-emerald-400/50';
+            btn.textContent = tr.equipped;
+        } else {
+            btn.className += ' cyber-btn text-white';
+            btn.textContent = tr.equip;
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                equippedChar = ch.id;
+                saveProgress();
+                renderSelectorList();
+                renderShopList();
+            });
+        }
+
+        row.appendChild(left);
+        row.appendChild(btn);
+        listEl.appendChild(row);
+    }
+}
+
+function renderShopList() {
+    const tr = t();
+    document.getElementById('shop-coins').textContent = String(coins);
+
+    const tabC = document.getElementById('tab-shop-chars');
+    const tabA = document.getElementById('tab-shop-acc');
+    if (shopTab === 'chars') {
+        tabC.className = 'py-2 rounded-xl font-cyber text-[11px] font-bold bg-sky-500/30 border border-sky-400 text-white transition';
+        tabA.className = 'py-2 rounded-xl font-cyber text-[11px] font-bold bg-slate-900/70 border border-slate-700 text-slate-300 transition';
+    } else {
+        tabA.className = 'py-2 rounded-xl font-cyber text-[11px] font-bold bg-sky-500/30 border border-sky-400 text-white transition';
+        tabC.className = 'py-2 rounded-xl font-cyber text-[11px] font-bold bg-slate-900/70 border border-slate-700 text-slate-300 transition';
+    }
+
+    const listEl = document.getElementById('shop-list');
+    listEl.innerHTML = '';
+
+    const items = shopTab === 'chars' ? CHARACTERS : ACCESSORIES;
+    const ownedArr = shopTab === 'chars' ? ownedChars : ownedAcc;
+    const equippedVal = shopTab === 'chars' ? equippedChar : equippedAcc;
+    const dict = shopTab === 'chars' ? tr.chars : tr.acc;
+
+    for (const item of items) {
+        const unlocked = ownedArr.includes(item.id);
+        const isEquipped = equippedVal === item.id;
+        const info = dict[item.id] || { name: item.id, desc: '' };
+
+        const row = document.createElement('div');
+        row.className = `flex items-center justify-between gap-2 p-3 rounded-2xl border ${
+            isEquipped ? 'bg-amber-500/15 border-amber-400/60' : 'bg-slate-900/75 border-slate-700/60'
+        }`;
+
+        const left = document.createElement('div');
+        left.className = 'flex items-center gap-3 min-w-0';
+        left.innerHTML = `
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center font-cyber text-[10px] font-black text-slate-950 shrink-0" style="background:${item.color}">
+                ${item.badge}
+            </div>
+            <div class="min-w-0">
+                <p class="font-cyber text-xs font-bold text-white truncate">${info.name}</p>
+                <p class="text-[11px] text-slate-400 truncate">${info.desc}</p>
+            </div>
+        `;
+
+        const btn = document.createElement('button');
+        btn.className = 'shrink-0 px-3 py-2 rounded-xl font-cyber text-[10px] font-bold tracking-wider transition';
+
+        if (!unlocked) {
+            const canAfford = coins >= item.price;
+            btn.disabled = !canAfford;
+            btn.className += canAfford
+                ? ' bg-amber-500 text-slate-950 border border-amber-300 active:scale-95'
+                : ' bg-slate-800 text-slate-500 border border-slate-700';
+            btn.textContent = `${tr.buy} · ${item.price}`;
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (coins < item.price) return;
+                coins -= item.price;
+                if (shopTab === 'chars') {
+                    ownedChars.push(item.id);
+                    equippedChar = item.id;
+                } else {
+                    ownedAcc.push(item.id);
+                    equippedAcc = item.id;
+                }
+                saveProgress();
+                sfx.playHelmet();
+                renderShopList();
+                renderSelectorList();
+            });
+        } else if (isEquipped) {
+            btn.className += ' bg-emerald-500/25 text-emerald-300 border border-emerald-400/50';
+            btn.textContent = tr.equipped;
+        } else {
+            btn.className += ' cyber-btn text-white';
+            btn.textContent = tr.equip;
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (shopTab === 'chars') equippedChar = item.id;
+                else equippedAcc = item.id;
+                saveProgress();
+                renderShopList();
+                renderSelectorList();
+            });
+        }
+
+        row.appendChild(left);
+        row.appendChild(btn);
+        listEl.appendChild(row);
     }
 }
 
@@ -1370,6 +2106,64 @@ window.addEventListener('keydown', (e) => {
 document.getElementById('btn-pause').addEventListener('click', (e) => {
     e.stopPropagation();
     openModal(modalPause);
+});
+
+document.getElementById('btn-selector').addEventListener('click', (e) => {
+    e.stopPropagation();
+    renderSelectorList();
+    openModal(modalSelector);
+});
+
+document.getElementById('btn-close-selector').addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeModal(modalSelector);
+});
+
+document.getElementById('btn-shop').addEventListener('click', (e) => {
+    e.stopPropagation();
+    renderShopList();
+    openModal(modalShop);
+});
+
+document.getElementById('btn-close-shop').addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeModal(modalShop);
+});
+
+document.getElementById('tab-shop-chars').addEventListener('click', (e) => {
+    e.stopPropagation();
+    shopTab = 'chars';
+    renderShopList();
+});
+
+document.getElementById('tab-shop-acc').addEventListener('click', (e) => {
+    e.stopPropagation();
+    shopTab = 'acc';
+    renderShopList();
+});
+
+document.getElementById('btn-lang').addEventListener('click', (e) => {
+    e.stopPropagation();
+    openModal(modalLang);
+});
+
+document.getElementById('btn-lang-es').addEventListener('click', (e) => {
+    e.stopPropagation();
+    lang = 'es';
+    saveProgress();
+    applyLanguageUI();
+});
+
+document.getElementById('btn-lang-en').addEventListener('click', (e) => {
+    e.stopPropagation();
+    lang = 'en';
+    saveProgress();
+    applyLanguageUI();
+});
+
+document.getElementById('btn-close-lang').addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeModal(modalLang);
 });
 
 document.getElementById('btn-resume').addEventListener('click', (e) => {
@@ -1400,7 +2194,7 @@ document.getElementById('btn-copy-tiktok').addEventListener('click', (e) => {
     }
     const btn = e.currentTarget;
     const prev = btn.textContent;
-    btn.textContent = '¡COPIADO!';
+    btn.textContent = t().copied;
     setTimeout(() => { btn.textContent = prev; }, 1400);
 });
 
@@ -1423,6 +2217,7 @@ document.getElementById('btn-restart-victory').addEventListener('click', (e) => 
 });
 
 resizeCanvas();
+applyLanguageUI();
 resetGame();
 gameLoop();
 </script>
