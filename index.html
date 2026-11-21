@@ -171,7 +171,6 @@
         </div>
     </div>
 
-    <!-- Modal Selector de Personajes -->
     <div id="modal-selector" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-md z-30 flex items-center justify-center p-4">
         <div class="cyber-panel rounded-3xl p-5 w-full max-w-[23rem] max-h-[84dvh] flex flex-col">
             <div class="flex justify-between items-center mb-3">
@@ -191,7 +190,6 @@
         </div>
     </div>
 
-    <!-- Modal Tienda (Personajes y Accesorios) -->
     <div id="modal-shop" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-md z-30 flex items-center justify-center p-4">
         <div class="cyber-panel rounded-3xl p-5 w-full max-w-[24rem] max-h-[86dvh] flex flex-col border-amber-400/40">
             <div class="flex justify-between items-center mb-3">
@@ -222,7 +220,6 @@
         </div>
     </div>
 
-    <!-- Modal Idioma -->
     <div id="modal-lang" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-md z-30 flex items-center justify-center p-4">
         <div class="cyber-panel rounded-3xl p-6 w-full max-w-[20rem] text-center">
             <h2 id="lang-modal-title" class="font-cyber text-xl font-bold text-white mb-1">IDIOMA</h2>
@@ -325,7 +322,7 @@
             <p id="victory-tag" class="text-xs font-cyber uppercase tracking-widest text-amber-400 mb-1">¡MISIÓN CUMPLIDA!</p>
             <h2 id="victory-title" class="font-cyber text-2xl sm:text-3xl font-black text-white mb-2">JEFE DERROTADO</h2>
             <p id="victory-desc" class="text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
-                Has destruido el OVNI del Señor Bigotes y salvado la galaxia.
+                Has conquistado ambos universos y derrotado a los jefes.
             </p>
             <div class="bg-slate-900/80 rounded-2xl p-3.5 border border-amber-400/30 mb-6">
                 <p id="lbl-final-score" class="text-[11px] uppercase tracking-wider text-slate-400">Puntuación Final</p>
@@ -538,7 +535,8 @@ const I18N = {
             retro: { name: "Retro", desc: "El pájaro original de Flappy Bird." },
             robot: { name: "Robot", desc: "Versión robótica con visor y antena." },
             navidad: { name: "Feliz Navidad", desc: "Pájaro base con gorro de Papá Noel." },
-            halloween: { name: "Feliz Halloween", desc: "Pájaro con calavera espeluznante." }
+            halloween: { name: "Feliz Halloween", desc: "Pájaro con calavera espeluznante." },
+            thiago: { name: "Thiago", desc: "Un huevo con pelo rubio." }
         },
         acc: {
             none: { name: "Sin Accesorio", desc: "Vuelo limpio sin extras." },
@@ -614,7 +612,8 @@ const I18N = {
             retro: { name: "Retro", desc: "The classic Flappy Bird." },
             robot: { name: "Robot", desc: "Robotic version with visor & antenna." },
             navidad: { name: "Feliz Navidad", desc: "Base bird with Santa hat." },
-            halloween: { name: "Feliz Halloween", desc: "Bird with a spooky skull." }
+            halloween: { name: "Feliz Halloween", desc: "Bird with a spooky skull." },
+            thiago: { name: "Thiago", desc: "An egg with blonde hair." }
         },
         acc: {
             none: { name: "No Accessory", desc: "Clean flight with no extras." },
@@ -629,7 +628,8 @@ const CHARACTERS = [
     { id: "retro", price: 30, badge: "RETRO", color: "#facc15" },
     { id: "robot", price: 60, badge: "ROBOT", color: "#94a3b8" },
     { id: "navidad", price: 90, badge: "XMAS", color: "#ef4444" },
-    { id: "halloween", price: 120, badge: "SKULL", color: "#f8fafc" }
+    { id: "halloween", price: 120, badge: "SKULL", color: "#f8fafc" },
+    { id: "thiago", price: 0, badge: "EGG", color: "#fde047" }
 ];
 
 const ACCESSORIES = [
@@ -704,6 +704,7 @@ let previousStateBeforeModal = 'WAITING';
 let lang = localStorage.getItem('flappy_lang') === 'en' ? 'en' : 'es';
 let coins = parseInt(localStorage.getItem('flappy_coins') || '0', 10);
 let ownedChars = JSON.parse(localStorage.getItem('flappy_owned_chars') || '["pilot"]');
+if (!ownedChars.includes('thiago')) ownedChars.push('thiago');
 let equippedChar = localStorage.getItem('flappy_char') || 'pilot';
 let ownedAcc = JSON.parse(localStorage.getItem('flappy_owned_acc') || '["none"]');
 let equippedAcc = localStorage.getItem('flappy_acc') || 'none';
@@ -744,7 +745,7 @@ let voyager = { active: false, x: 0, y: 0, progress: 0 };
 
 const boss = {
     active: false,
-    type: 1, // 1 = Señor Bigotes (200 pts), 2 = Retro Pixel Boss (400 pts)
+    type: 1,
     x: 0,
     y: 0,
     targetY: 0,
@@ -1554,7 +1555,6 @@ function drawBoss() {
     ctx.translate(boss.x, boss.y);
 
     if (boss.type === 2) {
-        // Jefe 2: Estética retro pixeleada (mismo concepto de OVNI + piloto enemigo)
         const px = 6;
         ctx.fillStyle = boss.hitFlash > 0 ? '#ffffff' : '#a855f7';
         for (let gx = -6; gx <= 6; gx++) {
@@ -1564,14 +1564,11 @@ function drawBoss() {
                 }
             }
         }
-        // Ojos pixelados retro
         ctx.fillStyle = '#22d3ee';
         ctx.fillRect(-3 * px, -2 * px, px, px);
         ctx.fillRect(2 * px, -2 * px, px, px);
-        // Boca pixelada
         ctx.fillStyle = '#facc15';
         ctx.fillRect(-2 * px, 1 * px, 4 * px, px * 0.7);
-        // Luces retro en la base
         ctx.fillStyle = (tick % 12 < 6) ? '#f43f5e' : '#38bdf8';
         ctx.fillRect(-5 * px, 2 * px, px, px);
         ctx.fillRect(4 * px, 2 * px, px, px);
@@ -1649,7 +1646,6 @@ function drawBird() {
     const wingY = Math.sin(bird.wingPhase) * 4;
 
     if (equippedChar === 'retro') {
-        // Pájaro original clásico de Flappy Bird (amarillo retro)
         ctx.fillStyle = '#facc15';
         ctx.strokeStyle = '#1e293b';
         ctx.lineWidth = 2;
@@ -1658,14 +1654,12 @@ function drawBird() {
         ctx.fill();
         ctx.stroke();
 
-        // Ala blanca clásica
         ctx.fillStyle = '#fef9c3';
         ctx.beginPath();
         ctx.ellipse(-5, 2 + wingY * 0.45, 7, 5, -0.2, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
 
-        // Ojo grande blanco
         ctx.fillStyle = '#ffffff';
         ctx.beginPath();
         ctx.arc(7, -4, 6, 0, Math.PI * 2);
@@ -1676,13 +1670,11 @@ function drawBird() {
         ctx.arc(9, -4, 2.3, 0, Math.PI * 2);
         ctx.fill();
 
-        // Pico naranja clásico
         ctx.fillStyle = '#f97316';
         drawRoundRect(ctx, bird.radius - 3, -2, 13, 9, 3);
         ctx.fill();
         ctx.stroke();
     } else if (equippedChar === 'robot') {
-        // Versión robótica del pájaro
         ctx.fillStyle = '#94a3b8';
         ctx.strokeStyle = '#e2e8f0';
         ctx.lineWidth = 2;
@@ -1690,7 +1682,6 @@ function drawBird() {
         ctx.fill();
         ctx.stroke();
 
-        // Antena
         ctx.strokeStyle = '#38bdf8';
         ctx.beginPath();
         ctx.moveTo(-2, -bird.radius * 0.9);
@@ -1701,19 +1692,16 @@ function drawBird() {
         ctx.arc(-6, -bird.radius - 9, 3.2, 0, Math.PI * 2);
         ctx.fill();
 
-        // Visor robótico
         ctx.fillStyle = '#0f172a';
         drawRoundRect(ctx, 2, -7, 13, 8, 2);
         ctx.fill();
         ctx.fillStyle = '#22d3ee';
         ctx.fillRect(5, -5, 7, 4);
 
-        // Ala mecánica
         ctx.fillStyle = '#64748b';
         drawRoundRect(ctx, -10, -2 + wingY * 0.35, 10, 7, 2);
         ctx.fill();
 
-        // Pico metálico
         ctx.fillStyle = '#f59e0b';
         ctx.beginPath();
         ctx.moveTo(bird.radius - 1, -2);
@@ -1721,8 +1709,44 @@ function drawBird() {
         ctx.lineTo(bird.radius - 1, 6);
         ctx.closePath();
         ctx.fill();
+    } else if (equippedChar === 'thiago') {
+        ctx.fillStyle = '#fefce8';
+        ctx.strokeStyle = '#eab308';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(0, 1, bird.radius * 0.88, bird.radius * 1.08, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#facc15';
+        ctx.strokeStyle = '#ca8a04';
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(-11, -bird.radius * 0.85);
+        ctx.lineTo(-7, -bird.radius - 11);
+        ctx.lineTo(-2, -bird.radius * 0.95);
+        ctx.lineTo(2, -bird.radius - 13);
+        ctx.lineTo(6, -bird.radius * 0.92);
+        ctx.lineTo(10, -bird.radius - 9);
+        ctx.lineTo(11, -bird.radius * 0.78);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(6, -2, 3.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(7, -3, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#fde047';
+        ctx.beginPath();
+        ctx.ellipse(-5, 3 + wingY * 0.35, 6, 4, -0.2, 0, Math.PI * 2);
+        ctx.fill();
     } else {
-        // Pájaro base (piloto, navidad o halloween)
         const bodyGrad = ctx.createRadialGradient(-4, -5, 2, 0, 0, bird.radius);
         bodyGrad.addColorStop(0, '#7dd3fc');
         bodyGrad.addColorStop(1, '#0284c7');
@@ -1740,7 +1764,6 @@ function drawBird() {
         ctx.fill();
 
         if (equippedChar === 'halloween') {
-            // Máscara / calavera de Halloween
             ctx.fillStyle = '#f8fafc';
             ctx.beginPath();
             ctx.arc(5, -1, bird.radius * 0.78, 0, Math.PI * 2);
@@ -1771,7 +1794,6 @@ function drawBird() {
         ctx.fill();
 
         if (equippedChar === 'navidad') {
-            // Gorro de Papá Noel
             ctx.fillStyle = '#dc2626';
             ctx.beginPath();
             ctx.moveTo(-13, -8);
@@ -1788,7 +1810,6 @@ function drawBird() {
         }
     }
 
-    // Accesorios equipados
     if (equippedAcc === 'visor') {
         ctx.strokeStyle = '#22d3ee';
         ctx.lineWidth = 2;
@@ -1948,7 +1969,7 @@ function renderSelectorList() {
     listEl.innerHTML = '';
 
     for (const ch of CHARACTERS) {
-        const unlocked = ownedChars.includes(ch.id);
+        const unlocked = ownedChars.includes(ch.id) || ch.price === 0;
         const isEquipped = equippedChar === ch.id;
         const info = tr.chars[ch.id] || { name: ch.id, desc: '' };
 
@@ -2019,7 +2040,7 @@ function renderShopList() {
     const dict = shopTab === 'chars' ? tr.chars : tr.acc;
 
     for (const item of items) {
-        const unlocked = ownedArr.includes(item.id);
+        const unlocked = ownedArr.includes(item.id) || item.price === 0;
         const isEquipped = equippedVal === item.id;
         const info = dict[item.id] || { name: item.id, desc: '' };
 
