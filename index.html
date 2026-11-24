@@ -227,12 +227,15 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-2 mb-3">
-                <button id="tab-shop-chars" class="py-2 rounded-xl font-cyber text-[11px] font-bold bg-sky-500/30 border border-sky-400 text-white transition">
+            <div class="grid grid-cols-3 gap-1.5 mb-3">
+                <button id="tab-shop-chars" class="py-2 rounded-xl font-cyber text-[10px] font-bold bg-sky-500/30 border border-sky-400 text-white transition">
                     PERSONAJES
                 </button>
-                <button id="tab-shop-acc" class="py-2 rounded-xl font-cyber text-[11px] font-bold bg-slate-900/70 border border-slate-700 text-slate-300 transition">
+                <button id="tab-shop-acc" class="py-2 rounded-xl font-cyber text-[10px] font-bold bg-slate-900/70 border border-slate-700 text-slate-300 transition">
                     ACCESORIOS
+                </button>
+                <button id="tab-shop-powers" class="py-2 rounded-xl font-cyber text-[10px] font-bold bg-slate-900/70 border border-slate-700 text-slate-300 transition">
+                    PODERES
                 </button>
             </div>
 
@@ -508,9 +511,11 @@ const I18N = {
         boss3Hud: "JEFE CÓSMICO · NEBULA CORE",
         boss3Title: "¡JEFE DE DIMENSIÓN: NEBULA CORE!",
         boss3Sub: "META 200 PTS · RECOGE MISILES",
+        boss4Hud: "JEFE NAVIDEÑO · GRINCH ESTELAR",
+        boss4Title: "¡JEFE DE DIMENSIÓN: GRINCH ESTELAR!",
+        boss4Sub: "PUNTOS X2 · META 200 PTS",
         mvTitle: "MULTIVERSO",
         mvSub: "Nueva fase cada 25 pts · Jefe a los 200 pts",
-        mvBossLabel: "Jefe a los 200 pts",
         mvSelected: "ACTIVO",
         mvSelect: "ENTRAR",
         selectorTitle: "SELECTOR",
@@ -521,9 +526,12 @@ const I18N = {
         coinsShopLabel: "Puntos / Monedas",
         tabChars: "PERSONAJES",
         tabAcc: "ACCESORIOS",
+        tabPowers: "PODERES",
         equipped: "EQUIPADO",
         equip: "EQUIPAR",
         buy: "COMPRAR",
+        activePower: "PREPARADO",
+        alreadyHavePower: "NO ACUMULABLE",
         close: "CERRAR",
         langTitle: "IDIOMA",
         langSub: "Selecciona el idioma del juego",
@@ -573,6 +581,11 @@ const I18N = {
                 name: "Multiverso Astral · Núcleo Cósmico",
                 desc: "Cada 25 pts cambia de fase hasta los 200 pts · Jefe Nebula Core.",
                 boss: "Nebula Core"
+            },
+            m4: {
+                name: "Universo Navideño · Puntos x2",
+                desc: "Cada 25 pts cambia de fase hasta los 200 pts · Puntos x2 en todo el universo.",
+                boss: "Grinch Estelar"
             }
         },
         chars: {
@@ -582,13 +595,30 @@ const I18N = {
             navidad: { name: "Feliz Navidad", desc: "Pájaro base con gorro de Papá Noel." },
             halloween: { name: "Feliz Halloween", desc: "Pájaro con calavera espeluznante." },
             thiago: { name: "Thiago", desc: "Un huevo con pelo rubio." },
-            rick: { name: "Científico Loco", desc: "Inspirado en un genio interdimensional con pelo de puntas." },
-            morty: { name: "Compañero Nervioso", desc: "Inspirado en un chico asustadizo con camiseta amarilla." }
+            ovni: { name: "OVNI", desc: "Platillo volador con luces intermitentes." }
         },
         acc: {
             none: { name: "Sin Accesorio", desc: "Vuelo limpio sin extras." },
             visor: { name: "Visor Cibernético", desc: "Estela neón de alta precisión." },
             crown: { name: "Corona Estelar", desc: "Brillo dorado para pilotos." }
+        },
+        powers: {
+            immunity: {
+                name: "Inmunidad a un golpe",
+                desc: "Evita 1 golpe fatal durante toda la partida. Dura 1 partida, no acumulable."
+            },
+            double_pts: {
+                name: "Puntos x2",
+                desc: "Duplica los puntos ganados al pasar obstáculos. Dura 1 partida, no acumulable."
+            },
+            extra_lives: {
+                name: "3 vidas extras",
+                desc: "Te salva 3 veces si caes o chocas en la partida. Dura 1 partida, no acumulable."
+            },
+            chakras: {
+                name: "Alineación de chacras",
+                desc: "Te salta directo hasta 225 puntos del universo actual. Dura 1 partida, no acumulable."
+            }
         }
     },
     en: {
@@ -608,9 +638,11 @@ const I18N = {
         boss3Hud: "COSMIC BOSS · NEBULA CORE",
         boss3Title: "DIMENSION BOSS: NEBULA CORE!",
         boss3Sub: "200 PTS GOAL · GRAB MISSILES",
+        boss4Hud: "XMAS BOSS · STAR GRINCH",
+        boss4Title: "DIMENSION BOSS: STAR GRINCH!",
+        boss4Sub: "2X POINTS · 200 PTS GOAL",
         mvTitle: "MULTIVERSE",
         mvSub: "New phase every 25 pts · Boss at 200 pts",
-        mvBossLabel: "Boss at 200 pts",
         mvSelected: "ACTIVE",
         mvSelect: "ENTER",
         selectorTitle: "SELECTOR",
@@ -621,9 +653,12 @@ const I18N = {
         coinsShopLabel: "Points / Coins",
         tabChars: "CHARACTERS",
         tabAcc: "ACCESSORIES",
+        tabPowers: "POWERS",
         equipped: "EQUIPPED",
         equip: "EQUIP",
         buy: "BUY",
+        activePower: "READY",
+        alreadyHavePower: "NOT STACKABLE",
         close: "CLOSE",
         langTitle: "LANGUAGE",
         langSub: "Choose game language",
@@ -673,6 +708,11 @@ const I18N = {
                 name: "Astral Multiverse · Cosmic Core",
                 desc: "New phase every 25 pts up to 200 pts · Boss Nebula Core.",
                 boss: "Nebula Core"
+            },
+            m4: {
+                name: "Christmas Universe · 2x Points",
+                desc: "New phase every 25 pts up to 200 pts · 2x points across this universe.",
+                boss: "Star Grinch"
             }
         },
         chars: {
@@ -682,13 +722,30 @@ const I18N = {
             navidad: { name: "Feliz Navidad", desc: "Base bird with Santa hat." },
             halloween: { name: "Feliz Halloween", desc: "Bird with a spooky skull." },
             thiago: { name: "Thiago", desc: "An egg with blonde hair." },
-            rick: { name: "Mad Scientist", desc: "Inspired by an interdimensional genius with spiky hair." },
-            morty: { name: "Nervous Sidekick", desc: "Inspired by a scared kid wearing a yellow t-shirt." }
+            ovni: { name: "UFO", desc: "Flying saucer with blinking lights." }
         },
         acc: {
             none: { name: "No Accessory", desc: "Clean flight with no extras." },
             visor: { name: "Cyber Visor", desc: "Precision neon trail." },
             crown: { name: "Star Crown", desc: "Golden shine for pilots." }
+        },
+        powers: {
+            immunity: {
+                name: "One-Hit Immunity",
+                desc: "Blocks 1 lethal hit for the whole run. Lasts 1 run, not stackable."
+            },
+            double_pts: {
+                name: "2x Points",
+                desc: "Doubles obstacle points for the whole run. Lasts 1 run, not stackable."
+            },
+            extra_lives: {
+                name: "3 Extra Lives",
+                desc: "Saves you 3 times if you crash or fall. Lasts 1 run, not stackable."
+            },
+            chakras: {
+                name: "Chakra Alignment",
+                desc: "Jumps straight to 225 points in this universe. Lasts 1 run, not stackable."
+            }
         }
     }
 };
@@ -699,6 +756,7 @@ const MULTIVERSES = [
         badge: "M-01",
         color: "#38bdf8",
         bossType: 1,
+        pointMult: 1,
         phases: [
             { id: 0, name: "Campo Soleado", minScore: 0, skyTop: [56, 189, 248], skyBottom: [186, 230, 253], pipeMain: "#10b981", pipeGlow: "#6ee7b7" },
             { id: 1, name: "Campo de Noche", minScore: 25, skyTop: [10, 15, 36], skyBottom: [30, 41, 82], pipeMain: "#3b82f6", pipeGlow: "#93c5fd" },
@@ -715,6 +773,7 @@ const MULTIVERSES = [
         badge: "M-02",
         color: "#c084fc",
         bossType: 2,
+        pointMult: 1,
         phases: [
             { id: 0, name: "Campo Soleado", minScore: 0, skyTop: [245, 158, 11], skyBottom: [254, 240, 138], pipeMain: "#84cc16", pipeGlow: "#d9f99d" },
             { id: 1, name: "Campo de Noche", minScore: 25, skyTop: [39, 10, 56], skyBottom: [88, 28, 135], pipeMain: "#a855f7", pipeGlow: "#e9d5ff" },
@@ -731,6 +790,7 @@ const MULTIVERSES = [
         badge: "M-03",
         color: "#34d399",
         bossType: 3,
+        pointMult: 1,
         phases: [
             { id: 0, name: "Campo Soleado", minScore: 0, skyTop: [14, 116, 144], skyBottom: [165, 243, 252], pipeMain: "#06b6d4", pipeGlow: "#a5f3fc" },
             { id: 1, name: "Campo de Noche", minScore: 25, skyTop: [4, 27, 45], skyBottom: [15, 76, 110], pipeMain: "#14b8a6", pipeGlow: "#99f6e4" },
@@ -740,6 +800,23 @@ const MULTIVERSES = [
             { id: 5, name: "Estación de Lanzamiento", minScore: 125, skyTop: [69, 26, 3], skyBottom: [180, 83, 9], pipeMain: "#fbbf24", pipeGlow: "#fde68a" },
             { id: 6, name: "Espacio Exterior", minScore: 150, skyTop: [2, 6, 23], skyBottom: [15, 23, 42], pipeMain: "#2dd4bf", pipeGlow: "#99f6e4" },
             { id: 7, name: "Interior Nave Nodriza", minScore: 200, skyTop: [30, 27, 75], skyBottom: [67, 56, 202], pipeMain: "#fb7185", pipeGlow: "#fecdd3" }
+        ]
+    },
+    {
+        id: "m4",
+        badge: "M-04·X2",
+        color: "#f87171",
+        bossType: 4,
+        pointMult: 2,
+        phases: [
+            { id: 0, name: "Campo Soleado", minScore: 0, skyTop: [22, 101, 52], skyBottom: [187, 247, 208], pipeMain: "#ef4444", pipeGlow: "#fecaca" },
+            { id: 1, name: "Campo de Noche", minScore: 25, skyTop: [15, 23, 42], skyBottom: [30, 58, 138], pipeMain: "#22c55e", pipeGlow: "#bbf7d0" },
+            { id: 2, name: "Ciudad", minScore: 50, skyTop: [153, 27, 27], skyBottom: [254, 202, 202], pipeMain: "#16a34a", pipeGlow: "#86efac" },
+            { id: 3, name: "Ciudad Nocturna", minScore: 75, skyTop: [12, 18, 38], skyBottom: [20, 83, 45], pipeMain: "#f43f5e", pipeGlow: "#fda4af" },
+            { id: 4, name: "Ciudad Futurista", minScore: 100, skyTop: [6, 78, 59], skyBottom: [16, 185, 129], pipeMain: "#fbbf24", pipeGlow: "#fef08a" },
+            { id: 5, name: "Estación de Lanzamiento", minScore: 125, skyTop: [69, 10, 10], skyBottom: [220, 38, 38], pipeMain: "#34d399", pipeGlow: "#a7f3d0" },
+            { id: 6, name: "Espacio Exterior", minScore: 150, skyTop: [4, 15, 25], skyBottom: [15, 45, 65], pipeMain: "#ef4444", pipeGlow: "#fca5a5" },
+            { id: 7, name: "Interior Nave Nodriza", minScore: 200, skyTop: [20, 40, 28], skyBottom: [60, 20, 25], pipeMain: "#22c55e", pipeGlow: "#fde047" }
         ]
     }
 ];
@@ -751,14 +828,20 @@ const CHARACTERS = [
     { id: "navidad", price: 90, badge: "XMAS", color: "#ef4444" },
     { id: "halloween", price: 120, badge: "SKULL", color: "#f8fafc" },
     { id: "thiago", price: 0, badge: "EGG", color: "#fde047" },
-    { id: "rick", price: 150, badge: "MAD", color: "#a5f3fc" },
-    { id: "morty", price: 150, badge: "SICK", color: "#fde047" }
+    { id: "ovni", price: 140, badge: "OVNI", color: "#22d3ee" }
 ];
 
 const ACCESSORIES = [
     { id: "none", price: 0, badge: "BASE", color: "#64748b" },
     { id: "visor", price: 45, badge: "NEON", color: "#22d3ee" },
     { id: "crown", price: 85, badge: "GOLD", color: "#fbbf24" }
+];
+
+const POWERS = [
+    { id: "immunity", price: 160, badge: "SHLD", color: "#38bdf8" },
+    { id: "double_pts", price: 180, badge: "X2", color: "#fbbf24" },
+    { id: "extra_lives", price: 210, badge: "+3HP", color: "#34d399" },
+    { id: "chakras", price: 250, badge: "225", color: "#c084fc" }
 ];
 
 function getActiveMultiverse() {
@@ -812,11 +895,18 @@ let coins = parseInt(localStorage.getItem('flappy_coins') || '0', 10);
 let ownedChars = JSON.parse(localStorage.getItem('flappy_owned_chars') || '["pilot"]');
 if (!ownedChars.includes('thiago')) ownedChars.push('thiago');
 let equippedChar = localStorage.getItem('flappy_char') || 'pilot';
+if (!CHARACTERS.some(c => c.id === equippedChar)) equippedChar = 'pilot';
 let ownedAcc = JSON.parse(localStorage.getItem('flappy_owned_acc') || '["none"]');
 let equippedAcc = localStorage.getItem('flappy_acc') || 'none';
 let equippedMultiverse = localStorage.getItem('flappy_multiverse') || 'm1';
 if (!MULTIVERSES.some(m => m.id === equippedMultiverse)) equippedMultiverse = 'm1';
 let shopTab = 'chars';
+
+// Poderes comprados/preparados para la partida actual (un solo uso, no acumulables)
+let queuedPowers = JSON.parse(localStorage.getItem('flappy_queued_powers') || '[]');
+let runImmunity = false;
+let runDoublePts = false;
+let runExtraLives = 0;
 
 let score = 0;
 let bestScore = parseInt(localStorage.getItem('flappy_ai_best') || '0', 10);
@@ -880,11 +970,13 @@ function saveProgress() {
     localStorage.setItem('flappy_owned_acc', JSON.stringify(ownedAcc));
     localStorage.setItem('flappy_acc', equippedAcc);
     localStorage.setItem('flappy_multiverse', equippedMultiverse);
+    localStorage.setItem('flappy_queued_powers', JSON.stringify(queuedPowers));
     localStorage.setItem('flappy_lang', lang);
 }
 
 function getBossHudTitle(bossType) {
     const tr = t();
+    if (bossType === 4) return tr.boss4Hud;
     if (bossType === 3) return tr.boss3Hud;
     if (bossType === 2) return tr.boss2Hud;
     return tr.boss1Hud;
@@ -894,7 +986,9 @@ function updatePhaseIndicatorText() {
     const phases = getActivePhases();
     const mv = getActiveMultiverse();
     const pName = t().phases[currentPhaseIndex] || phases[currentPhaseIndex].name;
-    phaseIndicator.textContent = `${t().phasePrefix} ${currentPhaseIndex + 1} · ${pName} · ${mv.badge}`;
+    const totalMult = (mv.pointMult || 1) * (runDoublePts ? 2 : 1);
+    const multTag = totalMult > 1 ? ` · X${totalMult}` : '';
+    phaseIndicator.textContent = `${t().phasePrefix} ${currentPhaseIndex + 1} · ${pName} · ${mv.badge}${multTag}`;
 }
 
 function applyLanguageUI() {
@@ -917,6 +1011,7 @@ function applyLanguageUI() {
     document.getElementById('lbl-coins-shop').textContent = tr.coinsShopLabel;
     document.getElementById('tab-shop-chars').textContent = tr.tabChars;
     document.getElementById('tab-shop-acc').textContent = tr.tabAcc;
+    document.getElementById('tab-shop-powers').textContent = tr.tabPowers;
     document.getElementById('btn-close-shop').textContent = tr.close;
 
     document.getElementById('lang-modal-title').textContent = tr.langTitle;
@@ -1017,18 +1112,28 @@ function initBackgroundDecor() {
 
 function resetGame() {
     const mv = getActiveMultiverse();
-    score = 0;
-    currentPhaseIndex = 0;
-    currentSkyTop = [...mv.phases[0].skyTop];
-    currentSkyBottom = [...mv.phases[0].skyBottom];
+
+    // Consumir poderes preparados para esta partida (1 partida, no acumulables)
+    runImmunity = queuedPowers.includes('immunity');
+    runDoublePts = queuedPowers.includes('double_pts');
+    runExtraLives = queuedPowers.includes('extra_lives') ? 3 : 0;
+    const hasChakras = queuedPowers.includes('chakras');
+
+    queuedPowers = [];
+    saveProgress();
+
+    score = hasChakras ? 225 : 0;
+    currentPhaseIndex = getPhaseIndexForScore(score);
+    currentSkyTop = [...mv.phases[currentPhaseIndex].skyTop];
+    currentSkyBottom = [...mv.phases[currentPhaseIndex].skyBottom];
 
     bird.radius = width < 480 ? 16 : 18;
     bird.x = width < 480 ? Math.max(54, Math.min(width * 0.24, 96)) : Math.min(width * 0.26, 150);
     bird.y = height * 0.48;
     bird.vy = 0;
     bird.rotation = 0;
-    bird.hasHelmet = false;
-    bird.helmetAnim = 0;
+    bird.hasHelmet = currentPhaseIndex >= 6;
+    bird.helmetAnim = currentPhaseIndex >= 6 ? 1 : 0;
     bird.trail = [];
 
     pipes = [];
@@ -1048,7 +1153,7 @@ function resetGame() {
     boss.fireTimer = 0;
     boss.bubbleTimer = 0;
 
-    scoreDisplay.textContent = '0';
+    scoreDisplay.textContent = String(score);
     updatePhaseIndicatorText();
     bossHud.classList.add('hidden');
     startHint.classList.remove('hidden');
@@ -1064,6 +1169,10 @@ function resetGame() {
 
     gameState = 'WAITING';
     initBackgroundDecor();
+
+    if (currentPhaseIndex === 7) {
+        activateBoss(mv.bossType);
+    }
 }
 
 function getPhaseIndexForScore(pts) {
@@ -1137,7 +1246,9 @@ function activateBoss(bossType = 1) {
     bossHud.classList.remove('hidden');
     updateBossHud();
 
-    if (bossType === 3) {
+    if (bossType === 4) {
+        showPhaseBanner(tr.boss4Title, tr.boss4Sub);
+    } else if (bossType === 3) {
         showPhaseBanner(tr.boss3Title, tr.boss3Sub);
     } else if (bossType === 2) {
         showPhaseBanner(tr.boss2Title, tr.boss2Sub);
@@ -1228,7 +1339,42 @@ function spawnMissileBubble() {
     });
 }
 
+function recoverFromHit(reason) {
+    if (runImmunity) {
+        runImmunity = false;
+        bird.y = Math.max(bird.radius + 20, Math.min(height * 0.45, bird.y));
+        bird.vy = JUMP_FORCE * 0.8;
+        pipes = [];
+        fireballs = [];
+        sfx.playHelmet();
+        spawnParticles(bird.x, bird.y, '#38bdf8', 24, 1.3);
+        showPhaseBanner(lang === 'en' ? 'IMMUNITY USED' : 'INMUNIDAD USADA');
+        return true;
+    }
+
+    if (runExtraLives > 0) {
+        runExtraLives--;
+        bird.y = Math.max(bird.radius + 20, Math.min(height * 0.45, bird.y));
+        bird.vy = JUMP_FORCE * 0.85;
+        pipes = [];
+        fireballs = [];
+        sfx.playHelmet();
+        spawnParticles(bird.x, bird.y, '#34d399', 22, 1.2);
+        showPhaseBanner(
+            lang === 'en' ? `EXTRA LIFE (${runExtraLives} LEFT)` : `VIDA EXTRA (${runExtraLives} RESTANTES)`,
+            reason
+        );
+        return true;
+    }
+
+    return false;
+}
+
 function triggerEndState(isVictory, reason = null) {
+    if (!isVictory && recoverFromHit(reason || t().reasonPipe)) {
+        return;
+    }
+
     if (score > bestScore) {
         bestScore = score;
         localStorage.setItem('flappy_ai_best', String(bestScore));
@@ -1356,8 +1502,10 @@ function update() {
 
             if (!p.passed && p.x + p.width < bird.x) {
                 p.passed = true;
-                score++;
-                coins++;
+                const mv = getActiveMultiverse();
+                const ptsEarned = (mv.pointMult || 1) * (runDoublePts ? 2 : 1);
+                score += ptsEarned;
+                coins += ptsEarned;
                 saveProgress();
                 scoreDisplay.textContent = String(score);
                 sfx.playScore();
@@ -1638,6 +1786,36 @@ function drawBoss() {
     ctx.save();
     ctx.translate(boss.x, boss.y);
 
+    if (boss.type === 4) {
+        ctx.fillStyle = boss.hitFlash > 0 ? '#ffffff' : '#16a34a';
+        ctx.beginPath();
+        ctx.arc(0, 0, 34, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#dc2626';
+        ctx.beginPath();
+        ctx.moveTo(-22, -22);
+        ctx.lineTo(4, -44);
+        ctx.lineTo(24, -22);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        drawRoundRect(ctx, -24, -24, 48, 7, 3);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(6, -45, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#fef08a';
+        ctx.beginPath();
+        ctx.arc(-10, -4, 5, 0, Math.PI * 2);
+        ctx.arc(10, -4, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        return;
+    }
+
     if (boss.type === 3) {
         ctx.strokeStyle = boss.hitFlash > 0 ? '#ffffff' : '#34d399';
         ctx.lineWidth = 3;
@@ -1650,7 +1828,7 @@ function drawBoss() {
         ctx.arc(0, 0, 34, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = '#22d3ee';
+        ctx.fillStyle = '#2dd4bf';
         ctx.beginPath();
         ctx.arc(0, 0, 17, 0, Math.PI * 2);
         ctx.fill();
@@ -1754,7 +1932,40 @@ function drawBird() {
 
     const wingY = Math.sin(bird.wingPhase) * 4;
 
-    if (equippedChar === 'retro') {
+    if (equippedChar === 'ovni') {
+        ctx.fillStyle = 'rgba(125, 211, 252, 0.35)';
+        ctx.strokeStyle = '#bae6fd';
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.arc(0, -4, bird.radius * 0.65, Math.PI, 0);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#22d3ee';
+        ctx.beginPath();
+        ctx.arc(0, -6, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        const saucerGrad = ctx.createLinearGradient(-bird.radius * 1.2, 0, bird.radius * 1.2, 0);
+        saucerGrad.addColorStop(0, '#334155');
+        saucerGrad.addColorStop(0.5, '#e2e8f0');
+        saucerGrad.addColorStop(1, '#334155');
+        ctx.fillStyle = saucerGrad;
+        ctx.beginPath();
+        ctx.ellipse(0, 2, bird.radius * 1.2, bird.radius * 0.48, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        for (let i = -1; i <= 1; i++) {
+            const on = ((tick + i * 4) % 12) < 6;
+            ctx.fillStyle = on ? '#38bdf8' : '#f43f5e';
+            ctx.beginPath();
+            ctx.arc(i * (bird.radius * 0.58), 3, 2.6, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    } else if (equippedChar === 'retro') {
         ctx.fillStyle = '#facc15';
         ctx.strokeStyle = '#1e293b';
         ctx.lineWidth = 2;
@@ -1855,156 +2066,6 @@ function drawBird() {
         ctx.beginPath();
         ctx.ellipse(-5, 3 + wingY * 0.35, 6, 4, -0.2, 0, Math.PI * 2);
         ctx.fill();
-    } else if (equippedChar === 'rick') {
-        // Bata blanca / base del cuerpo de Rick
-        ctx.fillStyle = '#f8fafc';
-        ctx.strokeStyle = '#1e293b';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(0, 0, bird.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        // Cuello de camiseta celeste de Rick
-        ctx.fillStyle = '#a5f3fc';
-        ctx.beginPath();
-        ctx.moveTo(-5, -6);
-        ctx.lineTo(5, -6);
-        ctx.lineTo(0, 4);
-        ctx.closePath();
-        ctx.fill();
-
-        // Pelo de puntas de Rick
-        ctx.fillStyle = '#bae6fd';
-        ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(-12, -7);
-        ctx.lineTo(-17, -15);
-        ctx.lineTo(-8, -13);
-        ctx.lineTo(-11, -22);
-        ctx.lineTo(-2, -16);
-        ctx.lineTo(0, -26);
-        ctx.lineTo(4, -16);
-        ctx.lineTo(11, -22);
-        ctx.lineTo(8, -13);
-        ctx.lineTo(17, -15);
-        ctx.lineTo(12, -7);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-
-        // Ojos grandes, típicos de su estilo animado
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#1e293b';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(2, -2, 5, 0, Math.PI * 2);
-        ctx.arc(10, -2, 5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        // Pupilas (puntos negros enojados/cansados)
-        ctx.fillStyle = '#0f172a';
-        ctx.beginPath();
-        ctx.arc(2, -2, 1.5, 0, Math.PI * 2);
-        ctx.arc(9, -2, 1.5, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Ceja unida por encima
-        ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 2.2;
-        ctx.beginPath();
-        ctx.moveTo(-2, -8);
-        ctx.lineTo(13, -8);
-        ctx.stroke();
-
-        // Saliva verde de Rick
-        ctx.fillStyle = '#4ade80';
-        ctx.beginPath();
-        ctx.ellipse(3, 4, 2.5, 3.5, 0.2, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Ala pequeña
-        ctx.fillStyle = '#e2e8f0';
-        ctx.strokeStyle = '#94a3b8';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.ellipse(-4, 2 + wingY * 0.4, 7, 5, -0.2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-        
-        // Pistola de portales o portal en el ala
-        ctx.fillStyle = '#22c55e';
-        ctx.beginPath();
-        ctx.arc(-11, 4, 3, 0, Math.PI*2);
-        ctx.fill();
-    } else if (equippedChar === 'morty') {
-        // Camiseta amarilla de Morty
-        ctx.fillStyle = '#fef08a';
-        ctx.strokeStyle = '#ca8a04';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(0, 0, bird.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        // Cabeza (color piel en la parte superior/frontal)
-        ctx.fillStyle = '#fde047';
-
-        // Pelo castaño redondo de Morty
-        ctx.fillStyle = '#78350f';
-        ctx.strokeStyle = '#451a03';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(-2, -8, 11, Math.PI, Math.PI * 2);
-        ctx.lineTo(9, -5);
-        ctx.arc(5, -6, 9, -0.4, Math.PI * 1.5);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-
-        // Ojos saltones de asustado
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#1e293b';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(3, -2, 5.5, 0, Math.PI * 2);
-        ctx.arc(11, -1, 5.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = '#0f172a';
-        ctx.beginPath();
-        ctx.arc(3.2, -2, 1.2, 0, Math.PI * 2);
-        ctx.arc(10.8, -1, 1.2, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Boca abierta de preocupación/angustia
-        ctx.fillStyle = '#991b1b';
-        ctx.beginPath();
-        ctx.ellipse(7, 5, 2.5, 4.5, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        // Cejas preocupadas curvadas
-        ctx.strokeStyle = '#1e293b';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.arc(2, -7, 3, Math.PI * 1.2, Math.PI * 1.9);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(10, -6, 3, Math.PI * 1.1, Math.PI * 1.8);
-        ctx.stroke();
-
-        // Pequeña ala
-        ctx.fillStyle = '#fef08a';
-        ctx.strokeStyle = '#ca8a04';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.ellipse(-5, 2 + wingY * 0.45, 7.5, 5, -0.2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
     } else {
         const bodyGrad = ctx.createRadialGradient(-4, -5, 2, 0, 0, bird.radius);
         bodyGrad.addColorStop(0, '#7dd3fc');
@@ -2086,6 +2147,14 @@ function drawBird() {
         ctx.lineTo(9, -bird.radius + 1);
         ctx.closePath();
         ctx.fill();
+    }
+
+    if (runImmunity) {
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.85)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, bird.radius + 10, 0, Math.PI * 2);
+        ctx.stroke();
     }
 
     if (bird.hasHelmet && bird.helmetAnim > 0) {
@@ -2239,7 +2308,7 @@ function renderMultiverseList() {
         const left = document.createElement('div');
         left.className = 'flex items-center gap-3 min-w-0';
         left.innerHTML = `
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center font-cyber text-[10px] font-black text-slate-950 shrink-0" style="background:${mv.color}">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center font-cyber text-[9px] font-black text-slate-950 shrink-0" style="background:${mv.color}">
                 ${mv.badge}
             </div>
             <div class="min-w-0">
@@ -2333,16 +2402,72 @@ function renderShopList() {
 
     const tabC = document.getElementById('tab-shop-chars');
     const tabA = document.getElementById('tab-shop-acc');
-    if (shopTab === 'chars') {
-        tabC.className = 'py-2 rounded-xl font-cyber text-[11px] font-bold bg-sky-500/30 border border-sky-400 text-white transition';
-        tabA.className = 'py-2 rounded-xl font-cyber text-[11px] font-bold bg-slate-900/70 border border-slate-700 text-slate-300 transition';
-    } else {
-        tabA.className = 'py-2 rounded-xl font-cyber text-[11px] font-bold bg-sky-500/30 border border-sky-400 text-white transition';
-        tabC.className = 'py-2 rounded-xl font-cyber text-[11px] font-bold bg-slate-900/70 border border-slate-700 text-slate-300 transition';
-    }
+    const tabP = document.getElementById('tab-shop-powers');
+
+    const activeTabClass = 'py-2 rounded-xl font-cyber text-[10px] font-bold bg-sky-500/30 border border-sky-400 text-white transition';
+    const idleTabClass = 'py-2 rounded-xl font-cyber text-[10px] font-bold bg-slate-900/70 border border-slate-700 text-slate-300 transition';
+
+    tabC.className = shopTab === 'chars' ? activeTabClass : idleTabClass;
+    tabA.className = shopTab === 'acc' ? activeTabClass : idleTabClass;
+    tabP.className = shopTab === 'powers' ? activeTabClass : idleTabClass;
 
     const listEl = document.getElementById('shop-list');
     listEl.innerHTML = '';
+
+    if (shopTab === 'powers') {
+        for (const pw of POWERS) {
+            const alreadyQueued = queuedPowers.includes(pw.id);
+            const info = tr.powers[pw.id] || { name: pw.id, desc: '' };
+
+            const row = document.createElement('div');
+            row.className = `flex items-center justify-between gap-2 p-3 rounded-2xl border ${
+                alreadyQueued ? 'bg-purple-500/15 border-purple-400/60' : 'bg-slate-900/75 border-slate-700/60'
+            }`;
+
+            const left = document.createElement('div');
+            left.className = 'flex items-center gap-3 min-w-0';
+            left.innerHTML = `
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center font-cyber text-[10px] font-black text-slate-950 shrink-0" style="background:${pw.color}">
+                    ${pw.badge}
+                </div>
+                <div class="min-w-0">
+                    <p class="font-cyber text-xs font-bold text-white truncate">${info.name}</p>
+                    <p class="text-[11px] text-slate-400 truncate">${info.desc}</p>
+                </div>
+            `;
+
+            const btn = document.createElement('button');
+            btn.className = 'shrink-0 px-3 py-2 rounded-xl font-cyber text-[10px] font-bold tracking-wider transition';
+
+            if (alreadyQueued) {
+                btn.disabled = true;
+                btn.className += ' bg-purple-500/25 text-purple-200 border border-purple-400/50';
+                btn.textContent = tr.activePower;
+            } else {
+                const canAfford = coins >= pw.price;
+                btn.disabled = !canAfford;
+                btn.className += canAfford
+                    ? ' bg-amber-500 text-slate-950 border border-amber-300 active:scale-95'
+                    : ' bg-slate-800 text-slate-500 border border-slate-700';
+                btn.textContent = `${tr.buy} · ${pw.price}`;
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (coins < pw.price || queuedPowers.includes(pw.id)) return;
+                    coins -= pw.price;
+                    queuedPowers.push(pw.id);
+                    saveProgress();
+                    sfx.playHelmet();
+                    renderShopList();
+                    renderSelectorList();
+                });
+            }
+
+            row.appendChild(left);
+            row.appendChild(btn);
+            listEl.appendChild(row);
+        }
+        return;
+    }
 
     const items = shopTab === 'chars' ? CHARACTERS : ACCESSORIES;
     const ownedArr = shopTab === 'chars' ? ownedChars : ownedAcc;
@@ -2481,6 +2606,12 @@ document.getElementById('tab-shop-chars').addEventListener('click', (e) => {
 document.getElementById('tab-shop-acc').addEventListener('click', (e) => {
     e.stopPropagation();
     shopTab = 'acc';
+    renderShopList();
+});
+
+document.getElementById('tab-shop-powers').addEventListener('click', (e) => {
+    e.stopPropagation();
+    shopTab = 'powers';
     renderShopList();
 });
 
