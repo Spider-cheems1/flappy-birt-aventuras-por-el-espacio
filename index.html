@@ -114,6 +114,12 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
             </button>
+            <button id="btn-multiverse" aria-label="Multiverso" class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl cyber-panel flex items-center justify-center text-cyan-300 hover:text-white active:scale-90 transition-all shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
+                    <circle cx="12" cy="12" r="2.5" />
+                </svg>
+            </button>
         </div>
 
         <div class="flex flex-col items-center min-w-0 flex-1 max-w-[65vw]">
@@ -168,6 +174,24 @@
         <div class="cyber-panel rounded-2xl px-5 py-3.5 border-cyan-400/70">
             <p id="hint-title" class="font-cyber text-sm sm:text-base font-bold text-cyan-300 tracking-wide">TOCA LA PANTALLA</p>
             <p id="hint-sub" class="text-xs sm:text-sm text-slate-200 mt-1">Pulsa cualquier zona para volar</p>
+        </div>
+    </div>
+
+    <div id="modal-multiverse" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-md z-30 flex items-center justify-center p-4">
+        <div class="cyber-panel rounded-3xl p-5 w-full max-w-[24rem] max-h-[86dvh] flex flex-col border-cyan-400/50">
+            <div class="flex justify-between items-center mb-3">
+                <div>
+                    <h2 id="mv-title" class="font-cyber text-lg font-bold text-white">MULTIVERSO</h2>
+                    <p id="mv-sub" class="text-[11px] text-cyan-300">Nueva fase cada 25 pts · Jefe a los 200 pts</p>
+                </div>
+                <span id="mv-badge" class="bg-slate-900/90 border border-cyan-400/35 rounded-xl px-2.5 py-1 font-cyber text-[10px] font-bold text-cyan-300">
+                    25 / 200
+                </span>
+            </div>
+            <div id="multiverse-list" class="custom-scroll overflow-y-auto flex flex-col gap-2.5 pr-1 flex-1"></div>
+            <button id="btn-close-multiverse" class="cyber-btn w-full py-3 rounded-2xl font-cyber font-bold text-white text-xs tracking-wider mt-4">
+                CERRAR
+            </button>
         </div>
     </div>
 
@@ -322,11 +346,11 @@
             <p id="victory-tag" class="text-xs font-cyber uppercase tracking-widest text-amber-400 mb-1">¡MISIÓN CUMPLIDA!</p>
             <h2 id="victory-title" class="font-cyber text-2xl sm:text-3xl font-black text-white mb-2">JEFE DERROTADO</h2>
             <p id="victory-desc" class="text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
-                Has conquistado ambos universos y derrotado a los jefes.
+                Has conquistado el multiverso y derrotado al jefe de esta dimensión.
             </p>
             <div class="bg-slate-900/80 rounded-2xl p-3.5 border border-amber-400/30 mb-6">
                 <p id="lbl-final-score" class="text-[11px] uppercase tracking-wider text-slate-400">Puntuación Final</p>
-                <p id="victory-score" class="font-cyber text-3xl font-black text-amber-300 mt-0.5">400</p>
+                <p id="victory-score" class="font-cyber text-3xl font-black text-amber-300 mt-0.5">200</p>
             </div>
             <button id="btn-restart-victory" class="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 font-cyber font-bold text-white text-sm tracking-wider shadow-lg active:scale-95 transition">
                 JUGAR DE NUEVO
@@ -471,19 +495,24 @@ const I18N = {
         hintTitle: "TOCA LA PANTALLA",
         hintSub: "Pulsa cualquier zona para volar",
         newZone: "NUEVA ZONA ALCANZADA",
-        universeShift: "CAMBIO DE UNIVERSO",
-        universe2Title: "UNIVERSO 2 · TONOS ALTERNOS",
-        universe2Sub: "MISMAS FASES · META 400 PTS",
         voyagerTitle: "SONDA VOYAGER 1 DETECTADA",
         voyagerSub: "EASTER EGG ESPACIAL",
         helmetTitle: "ESPACIO EXTERIOR · CASCO ACTIVADO",
         helmetSub: "FASE ESPACIAL EXTENDIDA",
         boss1Hud: "JEFE OVNI · BIGOTES",
-        boss1Title: "¡JEFE FINAL: SEÑOR BIGOTES!",
-        boss1Sub: "RECOGE MISILES EN BURBUJAS",
+        boss1Title: "¡JEFE DE DIMENSIÓN: SEÑOR BIGOTES!",
+        boss1Sub: "META 200 PTS · RECOGE MISILES",
         boss2Hud: "JEFE RETRO · PIXEL OVERLORD",
-        boss2Title: "¡JEFE RETRO PIXELEADO!",
-        boss2Sub: "META 400 PTS · RECOGE MISILES",
+        boss2Title: "¡JEFE DE DIMENSIÓN: PIXEL OVERLORD!",
+        boss2Sub: "META 200 PTS · RECOGE MISILES",
+        boss3Hud: "JEFE CÓSMICO · NEBULA CORE",
+        boss3Title: "¡JEFE DE DIMENSIÓN: NEBULA CORE!",
+        boss3Sub: "META 200 PTS · RECOGE MISILES",
+        mvTitle: "MULTIVERSO",
+        mvSub: "Nueva fase cada 25 pts · Jefe a los 200 pts",
+        mvBossLabel: "Jefe a los 200 pts",
+        mvSelected: "ACTIVO",
+        mvSelect: "ENTRAR",
         selectorTitle: "SELECTOR",
         selectorSub: "Elige tu piloto desbloqueado",
         shopTitle: "TIENDA",
@@ -495,7 +524,6 @@ const I18N = {
         equipped: "EQUIPADO",
         equip: "EQUIPAR",
         buy: "COMPRAR",
-        noCoins: "SIN PUNTOS",
         close: "CERRAR",
         langTitle: "IDIOMA",
         langSub: "Selecciona el idioma del juego",
@@ -510,13 +538,13 @@ const I18N = {
         gameOverTitle: "SISTEMA CAÍDO",
         reasonGround: "Tocaste la superficie",
         reasonPipe: "Chocaste contra un obstáculo",
-        reasonFire: "Te alcanzó una bola de fuego del OVNI",
+        reasonFire: "Te alcanzó una bola de fuego del jefe",
         pts: "Puntos",
         best: "Récord",
         retry: "VOLVER A INTENTAR",
         victoryTag: "¡MISIÓN CUMPLIDA!",
         victoryTitle: "JEFE DERROTADO",
-        victoryDesc: "Has conquistado ambos universos y derrotado a los jefes.",
+        victoryDesc: "Alcanzaste los 200 puntos y derrotaste al jefe de este multiverso.",
         finalScore: "Puntuación Final",
         playAgain: "JUGAR DE NUEVO",
         phasePrefix: "Fase",
@@ -530,6 +558,23 @@ const I18N = {
             "Espacio Exterior",
             "Interior Nave Nodriza"
         ],
+        multiverses: {
+            m1: {
+                name: "Multiverso Alfa · Odisea Clásica",
+                desc: "Cada 25 pts cambia de fase hasta los 200 pts · Jefe Señor Bigotes.",
+                boss: "Señor Bigotes"
+            },
+            m2: {
+                name: "Multiverso Omega · Dimensión Retro",
+                desc: "Cada 25 pts cambia de fase hasta los 200 pts · Jefe Pixel Overlord.",
+                boss: "Pixel Overlord"
+            },
+            m3: {
+                name: "Multiverso Astral · Núcleo Cósmico",
+                desc: "Cada 25 pts cambia de fase hasta los 200 pts · Jefe Nebula Core.",
+                boss: "Nebula Core"
+            }
+        },
         chars: {
             pilot: { name: "Piloto Espacial", desc: "El explorador azul original." },
             retro: { name: "Retro", desc: "El pájaro original de Flappy Bird." },
@@ -548,19 +593,24 @@ const I18N = {
         hintTitle: "TAP THE SCREEN",
         hintSub: "Tap anywhere to fly",
         newZone: "NEW ZONE REACHED",
-        universeShift: "UNIVERSE SHIFT",
-        universe2Title: "UNIVERSE 2 · ALT PALETTE",
-        universe2Sub: "SAME PHASES · GOAL 400 PTS",
         voyagerTitle: "VOYAGER 1 PROBE DETECTED",
         voyagerSub: "SPACE EASTER EGG",
         helmetTitle: "OUTER SPACE · HELMET ACTIVE",
         helmetSub: "EXTENDED SPACE PHASE",
         boss1Hud: "UFO BOSS · WHISKERS",
-        boss1Title: "FINAL BOSS: MR. WHISKERS!",
-        boss1Sub: "COLLECT MISSILES IN BUBBLES",
+        boss1Title: "DIMENSION BOSS: MR. WHISKERS!",
+        boss1Sub: "200 PTS GOAL · GRAB MISSILES",
         boss2Hud: "RETRO BOSS · PIXEL OVERLORD",
-        boss2Title: "PIXEL RETRO BOSS!",
-        boss2Sub: "GOAL 400 PTS · GRAB MISSILES",
+        boss2Title: "DIMENSION BOSS: PIXEL OVERLORD!",
+        boss2Sub: "200 PTS GOAL · GRAB MISSILES",
+        boss3Hud: "COSMIC BOSS · NEBULA CORE",
+        boss3Title: "DIMENSION BOSS: NEBULA CORE!",
+        boss3Sub: "200 PTS GOAL · GRAB MISSILES",
+        mvTitle: "MULTIVERSE",
+        mvSub: "New phase every 25 pts · Boss at 200 pts",
+        mvBossLabel: "Boss at 200 pts",
+        mvSelected: "ACTIVE",
+        mvSelect: "ENTER",
         selectorTitle: "SELECTOR",
         selectorSub: "Choose your unlocked pilot",
         shopTitle: "SHOP",
@@ -572,7 +622,6 @@ const I18N = {
         equipped: "EQUIPPED",
         equip: "EQUIP",
         buy: "BUY",
-        noCoins: "NO POINTS",
         close: "CLOSE",
         langTitle: "LANGUAGE",
         langSub: "Choose game language",
@@ -587,13 +636,13 @@ const I18N = {
         gameOverTitle: "SYSTEM DOWN",
         reasonGround: "You hit the surface",
         reasonPipe: "You crashed into an obstacle",
-        reasonFire: "Hit by a UFO fireball",
+        reasonFire: "Hit by a boss fireball",
         pts: "Score",
         best: "Best",
         retry: "TRY AGAIN",
         victoryTag: "MISSION ACCOMPLISHED!",
         victoryTitle: "BOSS DEFEATED",
-        victoryDesc: "You conquered both universes and defeated the bosses.",
+        victoryDesc: "You reached 200 points and defeated this multiverse boss.",
         finalScore: "Final Score",
         playAgain: "PLAY AGAIN",
         phasePrefix: "Phase",
@@ -607,6 +656,23 @@ const I18N = {
             "Outer Space",
             "Mothership Interior"
         ],
+        multiverses: {
+            m1: {
+                name: "Alpha Multiverse · Classic Odyssey",
+                desc: "New phase every 25 pts up to 200 pts · Boss Mr. Whiskers.",
+                boss: "Mr. Whiskers"
+            },
+            m2: {
+                name: "Omega Multiverse · Retro Dimension",
+                desc: "New phase every 25 pts up to 200 pts · Boss Pixel Overlord.",
+                boss: "Pixel Overlord"
+            },
+            m3: {
+                name: "Astral Multiverse · Cosmic Core",
+                desc: "New phase every 25 pts up to 200 pts · Boss Nebula Core.",
+                boss: "Nebula Core"
+            }
+        },
         chars: {
             pilot: { name: "Space Pilot", desc: "The original blue explorer." },
             retro: { name: "Retro", desc: "The classic Flappy Bird." },
@@ -623,6 +689,57 @@ const I18N = {
     }
 };
 
+const MULTIVERSES = [
+    {
+        id: "m1",
+        badge: "M-01",
+        color: "#38bdf8",
+        bossType: 1,
+        phases: [
+            { id: 0, name: "Campo Soleado", minScore: 0, skyTop: [56, 189, 248], skyBottom: [186, 230, 253], pipeMain: "#10b981", pipeGlow: "#6ee7b7" },
+            { id: 1, name: "Campo de Noche", minScore: 25, skyTop: [10, 15, 36], skyBottom: [30, 41, 82], pipeMain: "#3b82f6", pipeGlow: "#93c5fd" },
+            { id: 2, name: "Ciudad", minScore: 50, skyTop: [96, 165, 250], skyBottom: [224, 242, 254], pipeMain: "#64748b", pipeGlow: "#cbd5e1" },
+            { id: 3, name: "Ciudad Nocturna", minScore: 75, skyTop: [9, 13, 28], skyBottom: [23, 37, 84], pipeMain: "#6366f1", pipeGlow: "#a5b4fc" },
+            { id: 4, name: "Ciudad Futurista", minScore: 100, skyTop: [24, 10, 48], skyBottom: [76, 29, 149], pipeMain: "#ec4899", pipeGlow: "#22d3ee" },
+            { id: 5, name: "Estación de Lanzamiento", minScore: 125, skyTop: [15, 23, 42], skyBottom: [234, 88, 12], pipeMain: "#f97316", pipeGlow: "#fdba74" },
+            { id: 6, name: "Espacio Exterior", minScore: 150, skyTop: [3, 5, 12], skyBottom: [12, 18, 38], pipeMain: "#06b6d4", pipeGlow: "#67e8f9" },
+            { id: 7, name: "Interior Nave Nodriza", minScore: 200, skyTop: [15, 20, 30], skyBottom: [30, 41, 59], pipeMain: "#ef4444", pipeGlow: "#fca5a5" }
+        ]
+    },
+    {
+        id: "m2",
+        badge: "M-02",
+        color: "#c084fc",
+        bossType: 2,
+        phases: [
+            { id: 0, name: "Campo Soleado", minScore: 0, skyTop: [245, 158, 11], skyBottom: [254, 240, 138], pipeMain: "#84cc16", pipeGlow: "#d9f99d" },
+            { id: 1, name: "Campo de Noche", minScore: 25, skyTop: [39, 10, 56], skyBottom: [88, 28, 135], pipeMain: "#a855f7", pipeGlow: "#e9d5ff" },
+            { id: 2, name: "Ciudad", minScore: 50, skyTop: [45, 212, 191], skyBottom: [204, 251, 241], pipeMain: "#0d9488", pipeGlow: "#5eead4" },
+            { id: 3, name: "Ciudad Nocturna", minScore: 75, skyTop: [30, 10, 28], skyBottom: [80, 18, 52], pipeMain: "#f43f5e", pipeGlow: "#fda4af" },
+            { id: 4, name: "Ciudad Futurista", minScore: 100, skyTop: [6, 30, 46], skyBottom: [14, 116, 144], pipeMain: "#eab308", pipeGlow: "#fef08a" },
+            { id: 5, name: "Estación de Lanzamiento", minScore: 125, skyTop: [49, 12, 74], skyBottom: [190, 24, 93], pipeMain: "#c026d3", pipeGlow: "#f5d0fe" },
+            { id: 6, name: "Espacio Exterior", minScore: 150, skyTop: [12, 6, 26], skyBottom: [46, 16, 101], pipeMain: "#38bdf8", pipeGlow: "#bae6fd" },
+            { id: 7, name: "Interior Nave Nodriza", minScore: 200, skyTop: [28, 15, 45], skyBottom: [76, 29, 149], pipeMain: "#22c55e", pipeGlow: "#86efac" }
+        ]
+    },
+    {
+        id: "m3",
+        badge: "M-03",
+        color: "#34d399",
+        bossType: 3,
+        phases: [
+            { id: 0, name: "Campo Soleado", minScore: 0, skyTop: [14, 116, 144], skyBottom: [165, 243, 252], pipeMain: "#06b6d4", pipeGlow: "#a5f3fc" },
+            { id: 1, name: "Campo de Noche", minScore: 25, skyTop: [4, 27, 45], skyBottom: [15, 76, 110], pipeMain: "#14b8a6", pipeGlow: "#99f6e4" },
+            { id: 2, name: "Ciudad", minScore: 50, skyTop: [52, 211, 153], skyBottom: [209, 250, 229], pipeMain: "#059669", pipeGlow: "#6ee7b7" },
+            { id: 3, name: "Ciudad Nocturna", minScore: 75, skyTop: [17, 24, 39], skyBottom: [31, 41, 55], pipeMain: "#818cf8", pipeGlow: "#c7d2fe" },
+            { id: 4, name: "Ciudad Futurista", minScore: 100, skyTop: [49, 16, 66], skyBottom: [112, 26, 117], pipeMain: "#f472b6", pipeGlow: "#fbcfe8" },
+            { id: 5, name: "Estación de Lanzamiento", minScore: 125, skyTop: [69, 26, 3], skyBottom: [180, 83, 9], pipeMain: "#fbbf24", pipeGlow: "#fde68a" },
+            { id: 6, name: "Espacio Exterior", minScore: 150, skyTop: [2, 6, 23], skyBottom: [15, 23, 42], pipeMain: "#2dd4bf", pipeGlow: "#99f6e4" },
+            { id: 7, name: "Interior Nave Nodriza", minScore: 200, skyTop: [30, 27, 75], skyBottom: [67, 56, 202], pipeMain: "#fb7185", pipeGlow: "#fecdd3" }
+        ]
+    }
+];
+
 const CHARACTERS = [
     { id: "pilot", price: 0, badge: "PILOT", color: "#38bdf8" },
     { id: "retro", price: 30, badge: "RETRO", color: "#facc15" },
@@ -638,30 +755,12 @@ const ACCESSORIES = [
     { id: "crown", price: 85, badge: "GOLD", color: "#fbbf24" }
 ];
 
-const PHASES_U1 = [
-    { id: 0, name: "Campo Soleado", minScore: 0, skyTop: [56, 189, 248], skyBottom: [186, 230, 253], pipeMain: "#10b981", pipeGlow: "#6ee7b7" },
-    { id: 1, name: "Campo de Noche", minScore: 25, skyTop: [10, 15, 36], skyBottom: [30, 41, 82], pipeMain: "#3b82f6", pipeGlow: "#93c5fd" },
-    { id: 2, name: "Ciudad", minScore: 50, skyTop: [96, 165, 250], skyBottom: [224, 242, 254], pipeMain: "#64748b", pipeGlow: "#cbd5e1" },
-    { id: 3, name: "Ciudad Nocturna", minScore: 75, skyTop: [9, 13, 28], skyBottom: [23, 37, 84], pipeMain: "#6366f1", pipeGlow: "#a5b4fc" },
-    { id: 4, name: "Ciudad Futurista", minScore: 100, skyTop: [24, 10, 48], skyBottom: [76, 29, 149], pipeMain: "#ec4899", pipeGlow: "#22d3ee" },
-    { id: 5, name: "Estación de Lanzamiento", minScore: 125, skyTop: [15, 23, 42], skyBottom: [234, 88, 12], pipeMain: "#f97316", pipeGlow: "#fdba74" },
-    { id: 6, name: "Espacio Exterior", minScore: 150, skyTop: [3, 5, 12], skyBottom: [12, 18, 38], pipeMain: "#06b6d4", pipeGlow: "#67e8f9" },
-    { id: 7, name: "Interior Nave Nodriza", minScore: 200, skyTop: [15, 20, 30], skyBottom: [30, 41, 59], pipeMain: "#ef4444", pipeGlow: "#fca5a5" }
-];
-
-const PHASES_U2 = [
-    { id: 0, name: "Campo Soleado", minScore: 200, skyTop: [245, 158, 11], skyBottom: [254, 240, 138], pipeMain: "#84cc16", pipeGlow: "#d9f99d" },
-    { id: 1, name: "Campo de Noche", minScore: 225, skyTop: [39, 10, 56], skyBottom: [88, 28, 135], pipeMain: "#a855f7", pipeGlow: "#e9d5ff" },
-    { id: 2, name: "Ciudad", minScore: 250, skyTop: [45, 212, 191], skyBottom: [204, 251, 241], pipeMain: "#0d9488", pipeGlow: "#5eead4" },
-    { id: 3, name: "Ciudad Nocturna", minScore: 275, skyTop: [30, 10, 28], skyBottom: [80, 18, 52], pipeMain: "#f43f5e", pipeGlow: "#fda4af" },
-    { id: 4, name: "Ciudad Futurista", minScore: 300, skyTop: [6, 30, 46], skyBottom: [14, 116, 144], pipeMain: "#eab308", pipeGlow: "#fef08a" },
-    { id: 5, name: "Estación de Lanzamiento", minScore: 325, skyTop: [49, 12, 74], skyBottom: [190, 24, 93], pipeMain: "#c026d3", pipeGlow: "#f5d0fe" },
-    { id: 6, name: "Espacio Exterior", minScore: 350, skyTop: [12, 6, 26], skyBottom: [46, 16, 101], pipeMain: "#38bdf8", pipeGlow: "#bae6fd" },
-    { id: 7, name: "Interior Nave Nodriza", minScore: 400, skyTop: [28, 15, 45], skyBottom: [76, 29, 149], pipeMain: "#22c55e", pipeGlow: "#86efac" }
-];
+function getActiveMultiverse() {
+    return MULTIVERSES.find(m => m.id === equippedMultiverse) || MULTIVERSES[0];
+}
 
 function getActivePhases() {
-    return currentUniverse === 2 ? PHASES_U2 : PHASES_U1;
+    return getActiveMultiverse().phases;
 }
 
 const canvas = document.getElementById('gameCanvas');
@@ -685,6 +784,7 @@ const modalGameover = document.getElementById('modal-gameover');
 const modalVictory = document.getElementById('modal-victory');
 const modalSelector = document.getElementById('modal-selector');
 const modalShop = document.getElementById('modal-shop');
+const modalMultiverse = document.getElementById('modal-multiverse');
 const modalLang = document.getElementById('modal-lang');
 
 function getViewportSize() {
@@ -708,18 +808,18 @@ if (!ownedChars.includes('thiago')) ownedChars.push('thiago');
 let equippedChar = localStorage.getItem('flappy_char') || 'pilot';
 let ownedAcc = JSON.parse(localStorage.getItem('flappy_owned_acc') || '["none"]');
 let equippedAcc = localStorage.getItem('flappy_acc') || 'none';
+let equippedMultiverse = localStorage.getItem('flappy_multiverse') || 'm1';
+if (!MULTIVERSES.some(m => m.id === equippedMultiverse)) equippedMultiverse = 'm1';
 let shopTab = 'chars';
 
 let score = 0;
 let bestScore = parseInt(localStorage.getItem('flappy_ai_best') || '0', 10);
-let currentUniverse = 1;
 let currentPhaseIndex = 0;
-let boss1Defeated = false;
 let bannerTimeout = null;
 let tick = 0;
 
-let currentSkyTop = [...PHASES_U1[0].skyTop];
-let currentSkyBottom = [...PHASES_U1[0].skyBottom];
+let currentSkyTop = [...MULTIVERSES[0].phases[0].skyTop];
+let currentSkyBottom = [...MULTIVERSES[0].phases[0].skyBottom];
 
 const bird = {
     x: 0,
@@ -773,14 +873,22 @@ function saveProgress() {
     localStorage.setItem('flappy_char', equippedChar);
     localStorage.setItem('flappy_owned_acc', JSON.stringify(ownedAcc));
     localStorage.setItem('flappy_acc', equippedAcc);
+    localStorage.setItem('flappy_multiverse', equippedMultiverse);
     localStorage.setItem('flappy_lang', lang);
+}
+
+function getBossHudTitle(bossType) {
+    const tr = t();
+    if (bossType === 3) return tr.boss3Hud;
+    if (bossType === 2) return tr.boss2Hud;
+    return tr.boss1Hud;
 }
 
 function updatePhaseIndicatorText() {
     const phases = getActivePhases();
+    const mv = getActiveMultiverse();
     const pName = t().phases[currentPhaseIndex] || phases[currentPhaseIndex].name;
-    const uTag = currentUniverse === 2 ? " · U2" : "";
-    phaseIndicator.textContent = `${t().phasePrefix} ${currentPhaseIndex + 1} · ${pName}${uTag}`;
+    phaseIndicator.textContent = `${t().phasePrefix} ${currentPhaseIndex + 1} · ${pName} · ${mv.badge}`;
 }
 
 function applyLanguageUI() {
@@ -788,6 +896,10 @@ function applyLanguageUI() {
     document.getElementById('btn-lang').textContent = lang.toUpperCase();
     document.getElementById('hint-title').textContent = tr.hintTitle;
     document.getElementById('hint-sub').textContent = tr.hintSub;
+
+    document.getElementById('mv-title').textContent = tr.mvTitle;
+    document.getElementById('mv-sub').textContent = tr.mvSub;
+    document.getElementById('btn-close-multiverse').textContent = tr.close;
 
     document.getElementById('selector-title').textContent = tr.selectorTitle;
     document.getElementById('selector-sub').textContent = tr.selectorSub;
@@ -826,8 +938,9 @@ function applyLanguageUI() {
     document.getElementById('lbl-final-score').textContent = tr.finalScore;
     document.getElementById('btn-restart-victory').textContent = tr.playAgain;
 
-    bossNameHud.textContent = boss.type === 2 ? tr.boss2Hud : tr.boss1Hud;
+    bossNameHud.textContent = getBossHudTitle(boss.type);
     updatePhaseIndicatorText();
+    renderMultiverseList();
     renderSelectorList();
     renderShopList();
 }
@@ -897,12 +1010,11 @@ function initBackgroundDecor() {
 }
 
 function resetGame() {
+    const mv = getActiveMultiverse();
     score = 0;
-    currentUniverse = 1;
     currentPhaseIndex = 0;
-    boss1Defeated = false;
-    currentSkyTop = [...PHASES_U1[0].skyTop];
-    currentSkyBottom = [...PHASES_U1[0].skyBottom];
+    currentSkyTop = [...mv.phases[0].skyTop];
+    currentSkyBottom = [...mv.phases[0].skyBottom];
 
     bird.radius = width < 480 ? 16 : 18;
     bird.x = width < 480 ? Math.max(54, Math.min(width * 0.24, 96)) : Math.min(width * 0.26, 150);
@@ -924,7 +1036,7 @@ function resetGame() {
     voyager.progress = 0;
 
     boss.active = false;
-    boss.type = 1;
+    boss.type = mv.bossType;
     boss.hp = 100;
     boss.hitFlash = 0;
     boss.fireTimer = 0;
@@ -941,6 +1053,7 @@ function resetGame() {
     modalVictory.classList.add('hidden');
     modalSelector.classList.add('hidden');
     modalShop.classList.add('hidden');
+    modalMultiverse.classList.add('hidden');
     modalLang.classList.add('hidden');
 
     gameState = 'WAITING';
@@ -948,17 +1061,8 @@ function resetGame() {
 }
 
 function getPhaseIndexForScore(pts) {
-    if (currentUniverse === 2) {
-        if (pts >= 400) return 7;
-        if (pts >= 350) return 6;
-        if (pts >= 325) return 5;
-        if (pts >= 300) return 4;
-        if (pts >= 275) return 3;
-        if (pts >= 250) return 2;
-        if (pts >= 225) return 1;
-        return 0;
-    }
     if (pts >= 200) return 7;
+    if (pts >= 175) return 6;
     if (pts >= 150) return 6;
     if (pts >= 125) return 5;
     if (pts >= 100) return 4;
@@ -981,33 +1085,11 @@ function showPhaseBanner(title, subtitle = null) {
     }, 2600);
 }
 
-function enterUniverse2() {
-    currentUniverse = 2;
-    currentPhaseIndex = 0;
-    boss.active = false;
-    bossHud.classList.add('hidden');
-    pipes = [];
-    fireballs = [];
-    missileBubbles = [];
-    activeMissiles = [];
-    updatePhaseIndicatorText();
-    showPhaseBanner(t().universe2Title, t().universe2Sub);
-}
-
 function checkPhaseProgression() {
-    if (currentUniverse === 1 && boss1Defeated && score >= 200) {
-        enterUniverse2();
-        return;
-    }
-
     const newPhaseIdx = getPhaseIndexForScore(score);
     const phases = getActivePhases();
 
-    const voyagerTrigger = currentUniverse === 1
-        ? (score >= 175 && score < 200)
-        : (score >= 375 && score < 400);
-
-    if (voyagerTrigger && !voyager.active) {
+    if (score >= 175 && score < 200 && !voyager.active) {
         voyager.active = true;
         voyager.x = width + 90;
         voyager.y = height * 0.28;
@@ -1025,7 +1107,7 @@ function checkPhaseProgression() {
             spawnParticles(bird.x, bird.y, '#38bdf8', 22);
             showPhaseBanner(t().helmetTitle, t().helmetSub);
         } else if (currentPhaseIndex === 7) {
-            activateBoss(currentUniverse === 2 ? 2 : 1);
+            activateBoss(getActiveMultiverse().bossType);
         } else {
             showPhaseBanner(t().phases[currentPhaseIndex] || phases[currentPhaseIndex].name);
         }
@@ -1033,6 +1115,7 @@ function checkPhaseProgression() {
 }
 
 function activateBoss(bossType = 1) {
+    const tr = t();
     boss.active = true;
     boss.type = bossType;
     boss.hp = 100;
@@ -1044,14 +1127,16 @@ function activateBoss(bossType = 1) {
     boss.bubbleTimer = 40;
 
     pipes = [];
-    bossNameHud.textContent = bossType === 2 ? t().boss2Hud : t().boss1Hud;
+    bossNameHud.textContent = getBossHudTitle(bossType);
     bossHud.classList.remove('hidden');
     updateBossHud();
 
-    if (bossType === 2) {
-        showPhaseBanner(t().boss2Title, t().boss2Sub);
+    if (bossType === 3) {
+        showPhaseBanner(tr.boss3Title, tr.boss3Sub);
+    } else if (bossType === 2) {
+        showPhaseBanner(tr.boss2Title, tr.boss2Sub);
     } else {
-        showPhaseBanner(t().boss1Title, t().boss1Sub);
+        showPhaseBanner(tr.boss1Title, tr.boss1Sub);
     }
 }
 
@@ -1244,7 +1329,7 @@ function update() {
     if (voyager.active) {
         voyager.x -= 1.6;
         voyager.y += Math.sin(tick * 0.03) * 0.35;
-        if (voyager.x < -120 || score >= 400) {
+        if (voyager.x < -120 || score >= 200) {
             voyager.active = false;
         }
     }
@@ -1296,7 +1381,7 @@ function update() {
         if (boss.hitFlash > 0) boss.hitFlash--;
 
         boss.fireTimer++;
-        if (boss.fireTimer >= (boss.type === 2 ? 72 : 82)) {
+        if (boss.fireTimer >= (boss.type >= 2 ? 72 : 82)) {
             boss.fireTimer = 0;
             spawnFireball();
         }
@@ -1359,15 +1444,8 @@ function update() {
                     saveProgress();
                     scoreDisplay.textContent = String(score);
                     spawnParticles(boss.x, boss.y, '#fbbf24', 45, 1.6);
-
-                    if (boss.type === 1 && currentUniverse === 1) {
-                        boss1Defeated = true;
-                        enterUniverse2();
-                        return;
-                    } else {
-                        triggerEndState(true);
-                        return;
-                    }
+                    triggerEndState(true);
+                    return;
                 }
                 continue;
             }
@@ -1553,6 +1631,31 @@ function drawBoss() {
 
     ctx.save();
     ctx.translate(boss.x, boss.y);
+
+    if (boss.type === 3) {
+        ctx.strokeStyle = boss.hitFlash > 0 ? '#ffffff' : '#34d399';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 58, 18, -0.25, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = boss.hitFlash > 0 ? '#ffffff' : '#0f766e';
+        ctx.beginPath();
+        ctx.arc(0, 0, 34, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#2dd4bf';
+        ctx.beginPath();
+        ctx.arc(0, 0, 17, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#fef08a';
+        ctx.beginPath();
+        ctx.arc(0, 0, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        return;
+    }
 
     if (boss.type === 2) {
         const px = 6;
@@ -1955,10 +2058,61 @@ function closeModal(modalEl) {
         !modalDots.classList.contains('hidden') ||
         !modalSelector.classList.contains('hidden') ||
         !modalShop.classList.contains('hidden') ||
+        !modalMultiverse.classList.contains('hidden') ||
         !modalLang.classList.contains('hidden');
 
     if (gameState === 'PAUSED' && !anyOpen) {
         gameState = previousStateBeforeModal;
+    }
+}
+
+function renderMultiverseList() {
+    const tr = t();
+    const listEl = document.getElementById('multiverse-list');
+    listEl.innerHTML = '';
+
+    for (const mv of MULTIVERSES) {
+        const isActive = equippedMultiverse === mv.id;
+        const info = tr.multiverses[mv.id] || { name: mv.id, desc: '', boss: '' };
+
+        const row = document.createElement('div');
+        row.className = `flex items-center justify-between gap-2 p-3 rounded-2xl border ${
+            isActive ? 'bg-cyan-500/20 border-cyan-400' : 'bg-slate-900/75 border-slate-700/60'
+        }`;
+
+        const left = document.createElement('div');
+        left.className = 'flex items-center gap-3 min-w-0';
+        left.innerHTML = `
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center font-cyber text-[10px] font-black text-slate-950 shrink-0" style="background:${mv.color}">
+                ${mv.badge}
+            </div>
+            <div class="min-w-0">
+                <p class="font-cyber text-xs font-bold text-white truncate">${info.name}</p>
+                <p class="text-[11px] text-slate-400 truncate">${info.desc}</p>
+            </div>
+        `;
+
+        const btn = document.createElement('button');
+        btn.className = 'shrink-0 px-3 py-2 rounded-xl font-cyber text-[10px] font-bold tracking-wider transition';
+        if (isActive) {
+            btn.className += ' bg-emerald-500/25 text-emerald-300 border border-emerald-400/50';
+            btn.textContent = tr.mvSelected;
+        } else {
+            btn.className += ' cyber-btn text-white';
+            btn.textContent = tr.mvSelect;
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                equippedMultiverse = mv.id;
+                saveProgress();
+                resetGame();
+                renderMultiverseList();
+                closeModal(modalMultiverse);
+            });
+        }
+
+        row.appendChild(left);
+        row.appendChild(btn);
+        listEl.appendChild(row);
     }
 }
 
@@ -2127,6 +2281,17 @@ window.addEventListener('keydown', (e) => {
 document.getElementById('btn-pause').addEventListener('click', (e) => {
     e.stopPropagation();
     openModal(modalPause);
+});
+
+document.getElementById('btn-multiverse').addEventListener('click', (e) => {
+    e.stopPropagation();
+    renderMultiverseList();
+    openModal(modalMultiverse);
+});
+
+document.getElementById('btn-close-multiverse').addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeModal(modalMultiverse);
 });
 
 document.getElementById('btn-selector').addEventListener('click', (e) => {
