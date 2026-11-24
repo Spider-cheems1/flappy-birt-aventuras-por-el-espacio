@@ -581,7 +581,9 @@ const I18N = {
             robot: { name: "Robot", desc: "Versión robótica con visor y antena." },
             navidad: { name: "Feliz Navidad", desc: "Pájaro base con gorro de Papá Noel." },
             halloween: { name: "Feliz Halloween", desc: "Pájaro con calavera espeluznante." },
-            thiago: { name: "Thiago", desc: "Un huevo con pelo rubio." }
+            thiago: { name: "Thiago", desc: "Un huevo con pelo rubio." },
+            rick: { name: "Científico Loco", desc: "Inspirado en un genio interdimensional con pelo de puntas." },
+            morty: { name: "Compañero Nervioso", desc: "Inspirado en un chico asustadizo con camiseta amarilla." }
         },
         acc: {
             none: { name: "Sin Accesorio", desc: "Vuelo limpio sin extras." },
@@ -679,7 +681,9 @@ const I18N = {
             robot: { name: "Robot", desc: "Robotic version with visor & antenna." },
             navidad: { name: "Feliz Navidad", desc: "Base bird with Santa hat." },
             halloween: { name: "Feliz Halloween", desc: "Bird with a spooky skull." },
-            thiago: { name: "Thiago", desc: "An egg with blonde hair." }
+            thiago: { name: "Thiago", desc: "An egg with blonde hair." },
+            rick: { name: "Mad Scientist", desc: "Inspired by an interdimensional genius with spiky hair." },
+            morty: { name: "Nervous Sidekick", desc: "Inspired by a scared kid wearing a yellow t-shirt." }
         },
         acc: {
             none: { name: "No Accessory", desc: "Clean flight with no extras." },
@@ -746,7 +750,9 @@ const CHARACTERS = [
     { id: "robot", price: 60, badge: "ROBOT", color: "#94a3b8" },
     { id: "navidad", price: 90, badge: "XMAS", color: "#ef4444" },
     { id: "halloween", price: 120, badge: "SKULL", color: "#f8fafc" },
-    { id: "thiago", price: 0, badge: "EGG", color: "#fde047" }
+    { id: "thiago", price: 0, badge: "EGG", color: "#fde047" },
+    { id: "rick", price: 150, badge: "MAD", color: "#a5f3fc" },
+    { id: "morty", price: 150, badge: "SICK", color: "#fde047" }
 ];
 
 const ACCESSORIES = [
@@ -1644,7 +1650,7 @@ function drawBoss() {
         ctx.arc(0, 0, 34, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = '#2dd4bf';
+        ctx.fillStyle = '#22d3ee';
         ctx.beginPath();
         ctx.arc(0, 0, 17, 0, Math.PI * 2);
         ctx.fill();
@@ -1849,6 +1855,156 @@ function drawBird() {
         ctx.beginPath();
         ctx.ellipse(-5, 3 + wingY * 0.35, 6, 4, -0.2, 0, Math.PI * 2);
         ctx.fill();
+    } else if (equippedChar === 'rick') {
+        // Bata blanca / base del cuerpo de Rick
+        ctx.fillStyle = '#f8fafc';
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, bird.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Cuello de camiseta celeste de Rick
+        ctx.fillStyle = '#a5f3fc';
+        ctx.beginPath();
+        ctx.moveTo(-5, -6);
+        ctx.lineTo(5, -6);
+        ctx.lineTo(0, 4);
+        ctx.closePath();
+        ctx.fill();
+
+        // Pelo de puntas de Rick
+        ctx.fillStyle = '#bae6fd';
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(-12, -7);
+        ctx.lineTo(-17, -15);
+        ctx.lineTo(-8, -13);
+        ctx.lineTo(-11, -22);
+        ctx.lineTo(-2, -16);
+        ctx.lineTo(0, -26);
+        ctx.lineTo(4, -16);
+        ctx.lineTo(11, -22);
+        ctx.lineTo(8, -13);
+        ctx.lineTo(17, -15);
+        ctx.lineTo(12, -7);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Ojos grandes, típicos de su estilo animado
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(2, -2, 5, 0, Math.PI * 2);
+        ctx.arc(10, -2, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Pupilas (puntos negros enojados/cansados)
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(2, -2, 1.5, 0, Math.PI * 2);
+        ctx.arc(9, -2, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Ceja unida por encima
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        ctx.moveTo(-2, -8);
+        ctx.lineTo(13, -8);
+        ctx.stroke();
+
+        // Saliva verde de Rick
+        ctx.fillStyle = '#4ade80';
+        ctx.beginPath();
+        ctx.ellipse(3, 4, 2.5, 3.5, 0.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Ala pequeña
+        ctx.fillStyle = '#e2e8f0';
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.ellipse(-4, 2 + wingY * 0.4, 7, 5, -0.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        
+        // Pistola de portales o portal en el ala
+        ctx.fillStyle = '#22c55e';
+        ctx.beginPath();
+        ctx.arc(-11, 4, 3, 0, Math.PI*2);
+        ctx.fill();
+    } else if (equippedChar === 'morty') {
+        // Camiseta amarilla de Morty
+        ctx.fillStyle = '#fef08a';
+        ctx.strokeStyle = '#ca8a04';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, bird.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Cabeza (color piel en la parte superior/frontal)
+        ctx.fillStyle = '#fde047';
+
+        // Pelo castaño redondo de Morty
+        ctx.fillStyle = '#78350f';
+        ctx.strokeStyle = '#451a03';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(-2, -8, 11, Math.PI, Math.PI * 2);
+        ctx.lineTo(9, -5);
+        ctx.arc(5, -6, 9, -0.4, Math.PI * 1.5);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Ojos saltones de asustado
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(3, -2, 5.5, 0, Math.PI * 2);
+        ctx.arc(11, -1, 5.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(3.2, -2, 1.2, 0, Math.PI * 2);
+        ctx.arc(10.8, -1, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Boca abierta de preocupación/angustia
+        ctx.fillStyle = '#991b1b';
+        ctx.beginPath();
+        ctx.ellipse(7, 5, 2.5, 4.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Cejas preocupadas curvadas
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(2, -7, 3, Math.PI * 1.2, Math.PI * 1.9);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(10, -6, 3, Math.PI * 1.1, Math.PI * 1.8);
+        ctx.stroke();
+
+        // Pequeña ala
+        ctx.fillStyle = '#fef08a';
+        ctx.strokeStyle = '#ca8a04';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.ellipse(-5, 2 + wingY * 0.45, 7.5, 5, -0.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
     } else {
         const bodyGrad = ctx.createRadialGradient(-4, -5, 2, 0, 0, bird.radius);
         bodyGrad.addColorStop(0, '#7dd3fc');
